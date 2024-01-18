@@ -4,13 +4,13 @@ body {
 }
 
 .game {
-  width: 1024px;
-  height: 600px;
+  width: 100%;
+  min-height: 440px;
   overflow: hidden;
   position: relative;
   background-image: url('./assets/background.png');
-  background-repeat: repeat-x;
-  background-size: cover;
+  background-size: 600px 500px;
+  background-position: center;
 }
 
 .mario {
