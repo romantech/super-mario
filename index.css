@@ -1,0 +1,36 @@
+.game {
+  width: 1024px;
+  height: 600px;
+  overflow: hidden;
+  position: relative;
+  background-image: url('./assets/background.png');
+  background-repeat: repeat-x;
+  background-size: cover;
+}
+
+.mario {
+  background-image: url('./assets/mario.png');
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  left: 20px;
+  z-index: 1;
+}
+
+.obstacle {
+  background-image: url('./assets/obstacle.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 0;
+  width: 50px;
+  height: 49px;
+}
+
+.score-heading {
+  color: white;
+  width: fit-content;
+  margin-left: auto;
+  padding-right: 1rem;
+}
