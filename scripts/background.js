@@ -10,7 +10,7 @@ class Background {
 
   move() {
     this.positionX -= this.speed;
-    DomManager.getGameArea.style.backgroundPositionX = this.positionX + 'px';
+    DomManager.gameArea.style.backgroundPositionX = this.positionX + 'px';
     this.frameId = requestAnimationFrame(this.move);
   }
 
