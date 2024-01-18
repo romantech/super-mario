@@ -1,4 +1,3 @@
-// game.js
 import Mario from './mario.js';
 import Background from './background.js';
 import Obstacles from './obstacle.js';
@@ -9,7 +8,9 @@ class Game {
     this.mario = new Mario({ onJumpComplete: this.addScore.bind(this) });
     this.background = new Background();
     this.obstacles = new Obstacles();
+
     this.score = 0;
+    this.isRunning = false;
     this.obstacleTimerId = null;
     this.collisionFrameId = null;
 
@@ -24,6 +25,10 @@ class Game {
   }
 
   start() {
+    if (this.isRunning) return;
+    this.isRunning = true;
+
+    this.obstacles.moveAll();
     this.background.move();
     this.checkCollision();
     this.obstacleTimerId = setInterval(
@@ -34,20 +39,23 @@ class Game {
     document.addEventListener('keydown', this.handleKeyDown);
   }
 
-  stop() {
+  stop(message = '') {
+    this.isRunning = false;
+
     this.background.stop();
-    this.obstacles.stop();
+    this.obstacles.stopAll();
     cancelAnimationFrame(this.collisionFrameId);
     clearInterval(this.obstacleTimerId);
+
     document.removeEventListener('keydown', this.handleKeyDown);
 
-    setTimeout(() => alert('충돌 발생! 게임 오버'));
+    if (message) setTimeout(() => alert(message));
   }
 
   checkCollision() {
     for (let obstacle of this.obstacles.list) {
       if (this.isColliding(this.mario, obstacle)) {
-        return this.stop();
+        return this.stop('Game Over!');
       }
     }
     this.collisionFrameId = requestAnimationFrame(this.checkCollision);
@@ -65,7 +73,13 @@ class Game {
   }
 
   handleKeyDown(e) {
-    if (e.code === 'Space') this.mario.jump();
+    if (e.code === 'Space') {
+      // "시작" 버튼을 누르면 버튼에 포커스된 상태가 되고,
+      // 스페이스를 누르면 기본 동작으로 인해 시작 버튼이 클릭되는 문제 있음
+      // preventDefault()를 이용해 기본 동작을 해제하면 문제 발생 안함
+      e.preventDefault();
+      this.mario.jump();
+    }
   }
 }
 

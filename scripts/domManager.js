@@ -2,6 +2,8 @@ class DomManager {
   constructor() {
     this.gameArea = document.querySelector('.game');
     this.score = document.querySelector('.score');
+    this.stopButton = document.querySelector('.stop-button');
+    this.startButton = document.querySelector('.start-button');
   }
 }
 

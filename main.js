@@ -1,8 +1,15 @@
-import { Game } from './scripts';
+import { DomManager, Game } from './scripts';
 
 const init = () => {
   const game = new Game();
-  game.start();
+
+  DomManager.stopButton.addEventListener('click', () => {
+    game.stop();
+  });
+
+  DomManager.startButton.addEventListener('click', () => {
+    game.start();
+  });
 };
 
 window.onload = init;
