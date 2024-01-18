@@ -1,17 +1,23 @@
-const $gameArea = document.querySelector('.game');
-const SPEED = 5;
-let backgroundPositionX = 0;
-let frameId = null;
+import DomManager from './domManager.js';
 
-const moveBackground = () => {
-  backgroundPositionX -= SPEED;
-  $gameArea.style.backgroundPositionX = backgroundPositionX + 'px'; // 배경 이미지의 가로 위치 지정
-  frameId = requestAnimationFrame(moveBackground);
-};
+class Background {
+  constructor({ speed = 5 } = {}) {
+    this.speed = speed;
+    this.positionX = 0;
+    this.frameId = null;
+    this.move = this.move.bind(this);
+  }
 
-const stopGame = () => {
-  cancelAnimationFrame(frameId);
-  frameId = null;
-};
+  move() {
+    this.positionX -= this.speed;
+    DomManager.getGameArea.style.backgroundPositionX = this.positionX + 'px';
+    this.frameId = requestAnimationFrame(this.move);
+  }
 
-export { moveBackground, stopGame };
+  stop() {
+    cancelAnimationFrame(this.frameId);
+    this.frameId = null;
+  }
+}
+
+export default Background;

@@ -1,22 +1,21 @@
-const $gameArea = document.querySelector('.game');
-const $score = document.querySelector('.score');
-
-const addScore = () => {
-  const nextScore = parseInt($score.textContent) + 1;
-  $score.textContent = String(nextScore);
-};
+import DomManager from './domManager.js';
 
 class Mario {
   static maxHeight = 250;
   static jumpHeight = 10;
 
-  constructor(defaultBottom = 50, className = 'mario') {
+  constructor({
+    defaultBottom = 50,
+    className = 'mario',
+    onJumpComplete,
+  } = {}) {
     this.element = document.createElement('div');
     this.element.classList.add(className);
     this.defaultBottom = defaultBottom;
     this.element.style.bottom = defaultBottom + 'px';
     this.isJumping = false;
-    $gameArea.appendChild(this.element);
+    this.onJumpComplete = onJumpComplete;
+    DomManager.gameArea.appendChild(this.element);
   }
 
   jump() {
@@ -31,7 +30,7 @@ class Mario {
       if (nextBottom > this.defaultBottom) requestAnimationFrame(down);
       else {
         this.isJumping = false;
-        addScore();
+        this.onJumpComplete();
       }
     };
 

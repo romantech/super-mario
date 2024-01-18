@@ -1,33 +1,44 @@
-const $gameArea = document.querySelector('.game');
-const SPEED = 5;
-let obstacles = [];
+import DomManager from './domManager.js';
+
+class Obstacles {
+  constructor() {
+    this.obstacles = new Set();
+  }
+
+  addObstacle() {
+    const obstacle = new Obstacle();
+    this.obstacles.add(obstacle);
+    DomManager.gameArea.appendChild(obstacle.element);
+    obstacle.move();
+  }
+}
 
 class Obstacle {
-  constructor(defaultBottom = 50, className = 'obstacle') {
+  constructor(defaultBottom = 50, className = 'obstacle', speed = 5) {
+    this.speed = speed;
     this.element = document.createElement('div');
     this.element.classList.add(className);
     this.element.style.bottom = defaultBottom + 'px';
     this.element.style.right = '0px'; // 게임 영역 오른쪽 끝으로 장애물 초기 위치 지정
-    $gameArea.appendChild(this.element);
-    obstacles.push(this);
+    this.move = this.move.bind(this); // move 메소드 바인딩
+  }
+
+  get isInside() {
+    // 장애물이 왼쪽 끝에 도달하면 제거. window.innerWidth 값은 스크롤바를 포함한 뷰포트 사이즈
+    return this.currentRight < window.innerWidth;
+  }
+
+  get currentRight() {
+    return parseInt(this.element.style.right); // parseInt('10px') => 10
   }
 
   move() {
-    let currentRight = parseInt(this.element.style.right); // parseInt('10px') => 10
-    currentRight += SPEED; // 장애물을 왼쪽으로 이동
-    this.element.style.right = currentRight + 'px';
+    const nextRight = this.currentRight + this.speed;
+    this.element.style.right = nextRight + 'px'; // 장애물을 왼쪽으로 이동
 
-    // 장애물이 왼쪽 끝에 도달하면 제거. window.innerWidth는 스크롤바를 포함한 뷰포트 사이즈
-    if (currentRight > window.innerWidth) {
-      this.element.remove();
-      obstacles = obstacles.filter(obstacle => obstacle !== this);
-    } else requestAnimationFrame(this.move.bind(this));
+    if (!this.isInside) this.element.remove();
+    else requestAnimationFrame(this.move);
   }
 }
 
-const createObstacle = () => {
-  const obstacle = new Obstacle();
-  obstacle.move();
-};
-
-export { Obstacle, createObstacle, obstacles };
+export default Obstacles;
