@@ -27,7 +27,7 @@ class Game {
     this.background.move();
     this.checkCollision();
     this.obstacleTimerId = setInterval(
-      this.obstacles.addObstacle.bind(this.obstacles),
+      this.obstacles.add.bind(this.obstacles),
       2500,
     );
 
@@ -36,11 +36,12 @@ class Game {
 
   stop() {
     this.background.stop();
+    this.obstacles.stop();
     cancelAnimationFrame(this.collisionFrameId);
     clearInterval(this.obstacleTimerId);
     document.removeEventListener('keydown', this.handleKeyDown);
 
-    alert('충돌 발생! 게임 오버');
+    setTimeout(() => alert('충돌 발생! 게임 오버'));
   }
 
   checkCollision() {

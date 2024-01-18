@@ -5,11 +5,15 @@ class Obstacles {
     this.list = new Set();
   }
 
-  addObstacle() {
+  add() {
     const obstacle = new Obstacle();
     this.list.add(obstacle);
     DomManager.gameArea.appendChild(obstacle.element);
     obstacle.move();
+  }
+
+  stop() {
+    this.list.forEach(obstacle => obstacle.stop());
   }
 }
 
@@ -19,6 +23,7 @@ class Obstacle {
     this.element = document.createElement('div');
     this.element.classList.add(className);
     this.element.style.bottom = defaultBottom + 'px';
+    this.frameId = null;
     this.element.style.right = '0px'; // 게임 영역 오른쪽 끝으로 장애물 초기 위치 지정
     this.move = this.move.bind(this); // move 메소드 바인딩
   }
@@ -37,7 +42,12 @@ class Obstacle {
     this.element.style.right = nextRight + 'px'; // 장애물을 왼쪽으로 이동
 
     if (!this.isInside) this.element.remove();
-    else requestAnimationFrame(this.move);
+    else this.frameId = requestAnimationFrame(this.move);
+  }
+
+  stop() {
+    cancelAnimationFrame(this.frameId);
+    this.frameId = null;
   }
 }
 

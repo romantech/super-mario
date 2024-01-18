@@ -1,6 +1,8 @@
 import { Game } from './scripts';
 
-window.onload = function () {
+const init = () => {
   const game = new Game();
   game.start();
 };
+
+window.onload = init;
