@@ -2,12 +2,12 @@ import DomManager from './domManager.js';
 
 class Obstacles {
   constructor() {
-    this.obstacles = new Set();
+    this.list = new Set();
   }
 
   addObstacle() {
     const obstacle = new Obstacle();
-    this.obstacles.add(obstacle);
+    this.list.add(obstacle);
     DomManager.gameArea.appendChild(obstacle.element);
     obstacle.move();
   }
