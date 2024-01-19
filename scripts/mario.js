@@ -30,7 +30,7 @@ class Mario {
       if (nextBottom > this.defaultBottom) requestAnimationFrame(down);
       else {
         this.isJumping = false;
-        this.onJumpComplete();
+        this.onJumpComplete?.();
       }
     };
 

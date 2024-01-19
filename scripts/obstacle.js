@@ -1,8 +1,10 @@
 import DomManager from './domManager.js';
 
-class Obstacles {
+class ObstacleManager {
   constructor() {
     this.list = new Set();
+    this.frameId = null;
+    this.isMonitoring = false;
   }
 
   add() {
@@ -12,12 +14,39 @@ class Obstacles {
     obstacle.move();
   }
 
+  remove(obstacle) {
+    this.list.delete(obstacle);
+    obstacle.stop();
+    obstacle.element.remove();
+  }
+
+  offScreenMonitor() {
+    const checkObstacles = () => {
+      this.list.forEach(obstacle => {
+        if (obstacle.isOutOfBounds) this.remove(obstacle);
+      });
+
+      if (this.isMonitoring)
+        this.frameId = requestAnimationFrame(checkObstacles);
+    };
+
+    checkObstacles();
+  }
+
   moveAll() {
     this.list.forEach(obstacle => obstacle.move());
+    if (!this.isMonitoring) {
+      this.isMonitoring = true;
+      this.offScreenMonitor();
+    }
   }
 
   stopAll() {
     this.list.forEach(obstacle => obstacle.stop());
+    if (this.isMonitoring) {
+      cancelAnimationFrame(this.frameId);
+      this.isMonitoring = false;
+    }
   }
 }
 
@@ -33,27 +62,24 @@ class Obstacle {
     this.move = this.move.bind(this); // move 메소드 바인딩
   }
 
-  get isInside() {
+  get isOutOfBounds() {
     // 장애물이 왼쪽 끝에 도달하면 제거. window.innerWidth 값은 스크롤바를 포함한 뷰포트 사이즈
-    return this.currentRight < window.innerWidth;
+    return this.currentPosition >= window.innerWidth;
   }
 
-  get currentRight() {
-    return parseInt(this.element.style.right); // parseInt('10px') => 10
+  get currentPosition() {
+    return parseInt(this.element.style.right, 10); // parseInt('10px') => 10
   }
 
   move() {
-    const nextRight = this.currentRight + this.speed;
+    const nextRight = this.currentPosition + this.speed;
     this.element.style.right = nextRight + 'px'; // 장애물을 왼쪽으로 이동
-
-    if (!this.isInside) this.element.remove();
-    else this.frameId = requestAnimationFrame(this.move);
+    this.frameId = requestAnimationFrame(this.move);
   }
 
   stop() {
     cancelAnimationFrame(this.frameId);
-    this.frameId = null;
   }
 }
 
-export default Obstacles;
+export default ObstacleManager;
