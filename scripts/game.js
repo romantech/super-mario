@@ -55,19 +55,20 @@ class Game {
 
   checkCollision() {
     for (let obstacle of this.obstacles.list) {
-      if (this.isColliding(this.mario, obstacle)) {
+      const marioRect = this.mario.element.getBoundingClientRect();
+      const obstacleRect = obstacle.element.getBoundingClientRect();
+
+      if (this.isColliding(marioRect, obstacleRect)) {
         return this.stop('Game Over!');
-      } else if (this.isPassed(this.mario, obstacle)) {
+      } else if (this.isPassed(marioRect, obstacleRect)) {
+        this.lastObstaclePassed !== obstacle && this.addScore();
         this.lastObstaclePassed = obstacle;
-        this.addScore();
       }
     }
     this.collisionFrameId = requestAnimationFrame(this.checkCollision);
   }
 
-  isColliding(mario, obstacle) {
-    const marioRect = mario.element.getBoundingClientRect();
-    const obstacleRect = obstacle.element.getBoundingClientRect();
+  isColliding(marioRect, obstacleRect) {
     /*
      * 수평 충돌 상활
      * Mario: |-----|
@@ -84,15 +85,9 @@ class Game {
     return isHorizontalOverlap && isVerticalOverlap;
   }
 
-  isPassed(mario, obstacle) {
-    const marioRect = mario.element.getBoundingClientRect();
-    const obstacleRect = obstacle.element.getBoundingClientRect();
-
+  isPassed(marioRect, obstacleRect) {
     // 마리오가 장애물을 넘어갔는지 확인
-    const hasPassed = marioRect.right > obstacleRect.right;
-
-    // 마리오가 이미 넘어간 장애물인지 확인
-    return hasPassed && this.lastObstaclePassed !== obstacle;
+    return marioRect.right > obstacleRect.right;
   }
 
   handleKeyDown(e) {

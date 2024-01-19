@@ -26,8 +26,9 @@ class ObstacleManager {
         if (obstacle.isOutOfBounds) this.remove(obstacle);
       });
 
-      if (this.isMonitoring)
+      if (this.isMonitoring) {
         this.frameId = requestAnimationFrame(checkObstacles);
+      }
     };
 
     checkObstacles();
