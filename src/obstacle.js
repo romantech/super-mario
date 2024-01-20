@@ -60,7 +60,7 @@ class Obstacle {
     this.frameId = null;
     this.element.style.right = '0px'; // 게임 영역 오른쪽 끝으로 장애물 초기 위치 지정
 
-    this.move = this.move.bind(this); // move 메소드 바인딩
+    this.move = this.move.bind(this);
   }
 
   get isOutOfBounds() {
@@ -69,7 +69,7 @@ class Obstacle {
   }
 
   get currentPosition() {
-    return parseInt(this.element.style.right, 10); // parseInt('10px') => 10
+    return parseInt(this.element.style.right, 10); // parseInt('10.5px') => 10
   }
 
   move() {

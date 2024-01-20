@@ -25,8 +25,8 @@ class Mario {
     const up = () => {
       jumpCount++;
       velocity = Math.max(velocity - Mario.gravity, 0);
-      let nextBottom = jumpCount * velocity + this.defaultBottom;
 
+      let nextBottom = jumpCount * velocity + this.defaultBottom;
       this.element.style.bottom = nextBottom + 'px';
 
       if (nextBottom > this.defaultBottom) requestAnimationFrame(up);

@@ -3,6 +3,10 @@ import Background from './background.js';
 import ObstacleManager from './obstacle.js';
 import DomManager from './domManager.js';
 
+const generateRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 class Game {
   constructor() {
     this.mario = new Mario();
@@ -47,11 +51,11 @@ class Game {
 
     document.removeEventListener('keydown', this.handleKeyDown);
 
-    if (message) setTimeout(() => alert(message));
+    if (message) alert(message);
   }
 
   scheduleAddObstacle() {
-    const randomInterval = Math.floor(Math.random() * (2000 - 700 + 1)) + 700;
+    const randomInterval = generateRandomNumber(700, 2000);
     this.obstacleTimerId = setTimeout(() => {
       this.obstacles.add();
       if (this.isPlaying) this.scheduleAddObstacle();
@@ -91,8 +95,7 @@ class Game {
   }
 
   isPassed(marioRect, obstacleRect) {
-    // 마리오가 장애물을 넘어갔는지 확인
-    return marioRect.left > obstacleRect.right;
+    return marioRect.left > obstacleRect.right; // 마리오가 장애물 넘었는지 확인
   }
 
   handleKeyDown(e) {
