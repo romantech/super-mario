@@ -31,7 +31,11 @@ class Mario {
     const up = () => {
       const nextBottom = this.defaultBottom + ++jumpCount * Mario.jumpHeight;
       this.element.style.bottom = nextBottom + 'px';
-      requestAnimationFrame(nextBottom < Mario.maxHeight ? up : down);
+      if (nextBottom < Mario.maxHeight) {
+        requestAnimationFrame(up);
+      } else {
+        setTimeout(down, 50); // 최고점에 도달한 후에 지연
+      }
     };
 
     up();

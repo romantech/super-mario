@@ -32,10 +32,7 @@ class Game {
     this.obstacles.moveAll();
     this.background.move();
     this.checkCollision();
-    this.obstacleTimerId = setInterval(
-      this.obstacles.add.bind(this.obstacles),
-      2500,
-    );
+    this.scheduleAddObstacle();
 
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -51,6 +48,14 @@ class Game {
     document.removeEventListener('keydown', this.handleKeyDown);
 
     if (message) setTimeout(() => alert(message));
+  }
+
+  scheduleAddObstacle() {
+    const randomInterval = Math.floor(Math.random() * (2000 - 600 + 1)) + 600;
+    this.obstacleTimerId = setTimeout(() => {
+      this.obstacles.add();
+      if (this.isPlaying) this.scheduleAddObstacle();
+    }, randomInterval);
   }
 
   checkCollision() {
