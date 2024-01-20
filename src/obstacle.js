@@ -15,9 +15,9 @@ class ObstacleManager {
   }
 
   remove(obstacle) {
-    this.list.delete(obstacle);
     obstacle.stop();
     obstacle.element.remove();
+    this.list.delete(obstacle);
   }
 
   offScreenMonitor() {

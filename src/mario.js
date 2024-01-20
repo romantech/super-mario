@@ -4,17 +4,14 @@ class Mario {
   static maxHeight = 250;
   static jumpHeight = 10;
 
-  constructor({
-    defaultBottom = 50,
-    className = 'mario',
-    onJumpComplete,
-  } = {}) {
+  constructor({ defaultBottom = 50, className = 'mario' } = {}) {
+    this.defaultBottom = defaultBottom;
+    this.isJumping = false;
+
     this.element = document.createElement('div');
     this.element.classList.add(className);
-    this.defaultBottom = defaultBottom;
     this.element.style.bottom = defaultBottom + 'px';
-    this.isJumping = false;
-    this.onJumpComplete = onJumpComplete;
+
     DomManager.gameArea.appendChild(this.element);
   }
 
@@ -28,10 +25,7 @@ class Mario {
       const nextBottom = this.defaultBottom + --jumpCount * Mario.jumpHeight;
       this.element.style.bottom = nextBottom + 'px';
       if (nextBottom > this.defaultBottom) requestAnimationFrame(down);
-      else {
-        this.isJumping = false;
-        this.onJumpComplete?.();
-      }
+      else this.isJumping = false;
     };
 
     const up = () => {
