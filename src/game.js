@@ -51,7 +51,7 @@ class Game {
   }
 
   scheduleAddObstacle() {
-    const randomInterval = Math.floor(Math.random() * (2000 - 600 + 1)) + 600;
+    const randomInterval = Math.floor(Math.random() * (2000 - 700 + 1)) + 700;
     this.obstacleTimerId = setTimeout(() => {
       this.obstacles.add();
       if (this.isPlaying) this.scheduleAddObstacle();
@@ -92,7 +92,7 @@ class Game {
 
   isPassed(marioRect, obstacleRect) {
     // 마리오가 장애물을 넘어갔는지 확인
-    return marioRect.right > obstacleRect.right;
+    return marioRect.left > obstacleRect.right;
   }
 
   handleKeyDown(e) {
