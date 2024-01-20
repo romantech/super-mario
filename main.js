@@ -1,15 +1,10 @@
-import { DomManager, Game } from './scripts';
+import { DomManager, Game } from './src';
 
 const init = () => {
   const game = new Game();
 
-  DomManager.stopButton.addEventListener('click', () => {
-    game.stop();
-  });
-
-  DomManager.startButton.addEventListener('click', () => {
-    game.start();
-  });
+  DomManager.stopButton.onclick = () => game.stop();
+  DomManager.startButton.onclick = () => game.start();
 };
 
 window.onload = init;
