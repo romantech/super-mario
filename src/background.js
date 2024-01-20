@@ -1,7 +1,7 @@
 import DomManager from './domManager.js';
 
 class Background {
-  constructor({ speed = 5 } = {}) {
+  constructor({ speed }) {
     this.speed = speed;
     this.positionX = 0;
     this.frameId = null;

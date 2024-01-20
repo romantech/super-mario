@@ -4,7 +4,7 @@ class Mario {
   static jumpHeight = 18;
   static gravity = 0.4; // 중력 가속도
 
-  constructor({ defaultBottom = 50, className = 'mario' } = {}) {
+  constructor({ defaultBottom, className = 'mario' }) {
     this.defaultBottom = defaultBottom;
     this.isJumping = false;
 

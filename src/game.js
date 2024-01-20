@@ -8,16 +8,16 @@ const generateRandomNumber = (min, max) => {
 };
 
 class Game {
-  constructor() {
-    this.mario = new Mario();
-    this.background = new Background();
+  constructor({ speed, defaultBottom }) {
+    this.mario = new Mario({ defaultBottom });
+    this.background = new Background({ speed });
     this.obstacles = new ObstacleManager();
 
     this.score = 0;
     this.isPlaying = false;
     this.obstacleTimerId = null;
     this.collisionFrameId = null;
-    this.lastObstaclePassed = null;
+    this.lastPassedObstacle = null;
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -70,8 +70,8 @@ class Game {
       if (this.isColliding(marioRect, obstacleRect)) {
         return this.stop('Game Over!');
       } else if (this.isPassed(marioRect, obstacleRect)) {
-        this.lastObstaclePassed !== obstacle && this.addScore();
-        this.lastObstaclePassed = obstacle;
+        this.lastPassedObstacle !== obstacle && this.addScore();
+        this.lastPassedObstacle = obstacle;
       }
     }
     this.collisionFrameId = requestAnimationFrame(this.checkCollision);
