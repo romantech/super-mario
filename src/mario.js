@@ -1,8 +1,8 @@
 import DomManager from './dom-manager.js';
 
 class Mario {
-  static jumpHeight = 18;
-  static gravity = 0.4; // 중력 가속도
+  static jumpHeight = 18; // 점프 높이. 높을수록 더 높이 점프
+  static gravity = 0.4; // 중력 가속도. 낮을수록 더 오래 점프
 
   stopImage = new Image();
   runImage = new Image();
@@ -38,6 +38,20 @@ class Mario {
     let jumpCount = 0;
     let velocity = Mario.jumpHeight;
 
+    /**
+     * 상승(Fast) -> 정점(Slow) -> 하강(Fast) 중력 작용이 유사하게 적용된 점프 메서드
+     * count 1,  velocity 17.6, height 17.6 | 차이 18 -- 상승
+     * count 5,  velocity 16,   height 80   | 차이 63
+     * count 10, velocity 14,   height 140  | 차이 60 -- 느려지기 시작
+     * count 15, velocity 12,   height 180  | 차이 40
+     * count 20, velocity 10,   height 200  | 차이 20
+     * count 22, velocity 9.2,  height 202  | 차이 2  -- 정점
+     * count 25, velocity 8,    height 200  | 차이 2  -- 하강
+     * count 30, velocity 6,    height 180  | 차이 20 -- 빨라지기 시작
+     * count 35, velocity 4,    height 140  | 차이 40
+     * count 40, velocity 2,    height 80   | 차이 60
+     * count 45, velocity 0,    height 0    | 차이 80
+     * */
     const up = () => {
       jumpCount++;
       velocity = Math.max(velocity - Mario.gravity, 0);
