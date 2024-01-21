@@ -73,7 +73,7 @@ class Game {
   }
 
   scheduleAddObstacle() {
-    const randomInterval = generateRandomNumber(700, 2000);
+    const randomInterval = generateRandomNumber(600, 1800);
     this.obstacleTimerId = setTimeout(() => {
       this.obstacles.add();
       if (this.isPlaying) this.scheduleAddObstacle();

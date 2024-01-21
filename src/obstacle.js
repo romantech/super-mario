@@ -1,11 +1,9 @@
 import DomManager from './dom-manager.js';
 
 class ObstacleManager {
-  constructor() {
-    this.list = new Set();
-    this.frameId = null;
-    this.isMonitoring = false;
-  }
+  list = new Set();
+  frameId = null;
+  isMonitoring = false;
 
   add() {
     const obstacle = new Obstacle();
@@ -56,16 +54,15 @@ class ObstacleManager {
 }
 
 class Obstacle {
-  point = 1;
-
   constructor({ defaultBottom = 50, className = 'obstacle', speed = 5 } = {}) {
     this.speed = speed;
+    this.point = 1;
     this.frameId = null;
 
     this.element = document.createElement('div');
     this.element.classList.add(className);
     this.element.style.bottom = defaultBottom + 'px';
-    this.element.style.right = '0px'; // 게임 영역 오른쪽 끝으로 장애물 초기 위치 지정
+    this.element.style.right = '-100px'; // 장애물 생성을 자연스럽게 하기 위해 초기값을 더 오른쪽으로 지정
 
     this.move = this.move.bind(this);
   }
