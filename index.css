@@ -83,3 +83,13 @@ kbd {
   padding: 2px 4px;
   white-space: nowrap;
 }
+
+.dialog-failed::backdrop {
+  background: rgba(0, 0, 0, 0.33);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-failed form {
+  width: 200px;
+  text-align: center;
+}

@@ -24,9 +24,9 @@
       </header>
       <section class="control">
         <nav class="button-group">
-          <button class="start-button" type="button">Start</button>
-          <button class="stop-button" type="button">Stop</button>
-          <button class="restart-button" disabled type="button">Restart</button>
+          <button class="button-start" type="button">Start</button>
+          <button class="button-stop" type="button">Stop</button>
+          <button class="button-restart" disabled type="button">Restart</button>
         </nav>
         <h3 class="score-heading">Score <span class="score">0</span></h3>
       </section>
@@ -35,6 +35,16 @@
         <p class="guide">Press <kbd>space</kbd> or <kbd>touch</kbd> to jump</p>
       </aside>
     </main>
+    <!-- method="dialog"으로 지정해두면 버튼 클릭시 "제출"로 인식해서 dialog 닫고(새로고침 안함),
+    dialog 요소의 returnValue 속성에서 클릭한 버튼의 value 값을 가져올 수 있음 -->
+    <dialog class="dialog-failed">
+      <form method="dialog">
+        <h2>Game Over</h2>
+        <p>Your score is <span class="score">0</span></p>
+        <button value="close">OK</button>
+        <button value="restart">Restart</button>
+      </form>
+    </dialog>
     <script src="./main.js" type="module"></script>
   </body>
 </html>

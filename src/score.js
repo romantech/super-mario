@@ -23,7 +23,7 @@ class Score {
   }
 
   updateDisplay() {
-    DomManager.score.textContent = String(this.score);
+    DomManager.scores.forEach(el => (el.textContent = String(this.score)));
   }
 }
 
