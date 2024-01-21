@@ -1,15 +1,17 @@
-import Mario from './mario.js';
-import Background from './background.js';
-import ObstacleManager from './obstacle.js';
-import EventHandler from './event-handler.js';
-import DomManager from './dom-manager.js';
+import {
+  Background,
+  DomManager,
+  EventHandler,
+  Mario,
+  ObstacleManager,
+  Score,
+} from './index.js';
 
 const generateRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 class Game {
-  #score = 0;
   isPlaying = false;
   obstacleTimerId = null;
   collisionFrameId = null;
@@ -19,41 +21,29 @@ class Game {
     this.mario = new Mario({ defaultBottom });
     this.background = new Background({ speed });
     this.obstacles = new ObstacleManager();
+    this.score = new Score();
     this.eventHandler = new EventHandler(() => this.mario.jump());
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
     this.checkCollision = this.checkCollision.bind(this);
   }
 
-  get score() {
-    return this.#score;
-  }
-
-  set score(value) {
-    this.#score = value;
-    DomManager.score.textContent = String(value);
-  }
-
-  addScore() {
-    this.score += 1;
-  }
-
-  toggleButtonState(shouldRestart) {
+  toggleButtonActive(shouldRestart) {
     DomManager.startButton.disabled = shouldRestart;
     DomManager.stopButton.disabled = shouldRestart;
     DomManager.restartButton.disabled = !shouldRestart;
   }
 
   reset() {
-    this.score = 0;
     this.obstacles.reset();
     this.background.reset();
+    this.score.reset();
   }
 
   restart() {
     this.reset();
     this.start();
-    this.toggleButtonState(false);
+    this.toggleButtonActive(false);
   }
 
   start() {
@@ -93,10 +83,10 @@ class Game {
       const obstacleRect = obstacle.element.getBoundingClientRect();
 
       if (this.isColliding(marioRect, obstacleRect)) {
-        this.toggleButtonState(true);
-        return this.stop(`Game Over! Your Score: ${this.score}`);
+        this.toggleButtonActive(true);
+        return this.stop(`Game Over! Your Score is ${this.score.score}`);
       } else if (this.isPassed(marioRect, obstacleRect)) {
-        this.lastPassedObstacle !== obstacle && this.addScore();
+        this.lastPassedObstacle !== obstacle && this.score.add(obstacle.point);
         this.lastPassedObstacle = obstacle;
       }
     }

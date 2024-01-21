@@ -56,12 +56,15 @@ class ObstacleManager {
 }
 
 class Obstacle {
+  point = 1;
+
   constructor({ defaultBottom = 50, className = 'obstacle', speed = 5 } = {}) {
     this.speed = speed;
+    this.frameId = null;
+
     this.element = document.createElement('div');
     this.element.classList.add(className);
     this.element.style.bottom = defaultBottom + 'px';
-    this.frameId = null;
     this.element.style.right = '0px'; // 게임 영역 오른쪽 끝으로 장애물 초기 위치 지정
 
     this.move = this.move.bind(this);
