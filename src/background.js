@@ -18,6 +18,11 @@ class Background {
     cancelAnimationFrame(this.frameId);
     this.frameId = null;
   }
+
+  reset() {
+    this.positionX = 0;
+    DomManager.gameArea.style.backgroundPositionX = this.positionX + 'px';
+  }
 }
 
 export default Background;

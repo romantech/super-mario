@@ -20,6 +20,10 @@ class ObstacleManager {
     this.list.delete(obstacle);
   }
 
+  reset() {
+    this.list.forEach(obstacle => this.remove(obstacle));
+  }
+
   offScreenMonitor() {
     const checkObstacles = () => {
       this.list.forEach(obstacle => {

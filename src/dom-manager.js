@@ -4,6 +4,7 @@ class DomManager {
     this.score = document.querySelector('.score');
     this.stopButton = document.querySelector('.stop-button');
     this.startButton = document.querySelector('.start-button');
+    this.restartButton = document.querySelector('.restart-button');
   }
 }
 

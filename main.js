@@ -5,6 +5,7 @@ const init = () => {
 
   DomManager.stopButton.onclick = () => game.stop();
   DomManager.startButton.onclick = () => game.start();
+  DomManager.restartButton.onclick = () => game.restart();
 };
 
 window.onload = init;
