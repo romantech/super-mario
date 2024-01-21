@@ -1,0 +1,33 @@
+export default class EventHandler {
+  constructor(action) {
+    this.action = action;
+    // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleTouch = this.handleTouch.bind(this);
+  }
+
+  setupEventListeners() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('touchstart', this.handleTouch);
+  }
+
+  removeEventListeners() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('touchstart', this.handleTouch);
+  }
+
+  handleKeyDown(e) {
+    // "시작" 버튼을 누르면 버튼에 포커스된 상태가 되고,
+    // 스페이스를 누르면 기본 동작으로 인해 시작 버튼이 클릭되는 문제 있음
+    // preventDefault()를 이용해 기본 동작을 해제하면 문제 발생 안함
+    if (e.code === 'Space') {
+      e.preventDefault();
+      this.action();
+    }
+  }
+
+  handleTouch(e) {
+    e.preventDefault();
+    this.action();
+  }
+}

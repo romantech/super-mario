@@ -1,6 +1,7 @@
 import Mario from './mario.js';
 import Background from './background.js';
 import ObstacleManager from './obstacle.js';
+import EventHandler from './event-handler.js';
 import DomManager from './domManager.js';
 
 const generateRandomNumber = (min, max) => {
@@ -12,6 +13,7 @@ class Game {
     this.mario = new Mario({ defaultBottom });
     this.background = new Background({ speed });
     this.obstacles = new ObstacleManager();
+    this.eventHandler = new EventHandler(() => this.mario.jump());
 
     this.score = 0;
     this.isPlaying = false;
@@ -20,7 +22,6 @@ class Game {
     this.lastPassedObstacle = null;
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
-    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
   }
 
@@ -35,10 +36,9 @@ class Game {
 
     this.obstacles.moveAll();
     this.background.move();
+    this.eventHandler.setupEventListeners();
     this.checkCollision();
     this.scheduleAddObstacle();
-
-    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   stop(message = '') {
@@ -46,10 +46,9 @@ class Game {
 
     this.background.stop();
     this.obstacles.stopAll();
+    this.eventHandler.removeEventListeners();
     cancelAnimationFrame(this.collisionFrameId);
     clearInterval(this.obstacleTimerId);
-
-    document.removeEventListener('keydown', this.handleKeyDown);
 
     if (message) alert(message);
   }
@@ -96,16 +95,6 @@ class Game {
 
   isPassed(marioRect, obstacleRect) {
     return marioRect.left > obstacleRect.right; // 마리오가 장애물 넘었는지 확인
-  }
-
-  handleKeyDown(e) {
-    if (e.code === 'Space') {
-      // "시작" 버튼을 누르면 버튼에 포커스된 상태가 되고,
-      // 스페이스를 누르면 기본 동작으로 인해 시작 버튼이 클릭되는 문제 있음
-      // preventDefault()를 이용해 기본 동작을 해제하면 문제 발생 안함
-      e.preventDefault();
-      this.mario.jump();
-    }
   }
 }
 
