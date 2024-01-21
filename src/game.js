@@ -59,11 +59,12 @@ class Game {
   }
 
   stop(isFailed = false) {
+    if (!this.isPlaying) return;
     this.isPlaying = false;
 
     this.mario.stop();
-    this.background.stop();
     this.obstacles.stopAll();
+    this.background.stop();
     this.eventHandler.removeEventListeners();
     cancelAnimationFrame(this.collisionFrameId);
     clearInterval(this.obstacleTimerId);
