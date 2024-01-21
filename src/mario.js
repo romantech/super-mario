@@ -17,11 +17,12 @@ class Mario {
   }
 
   run() {
-    this.element.src = '/assets/mario-run.gif';
+    // Github Page 에서 루트 폴더는 {username}.github.io 이므로 주소에 레포지토리 이름 추가
+    this.element.src = 'super-mario/assets/mario-run.gif';
   }
 
   stop() {
-    this.element.src = '/assets/mario-stop.png';
+    this.element.src = 'super-mario/assets/mario-stop.png';
   }
 
   jump() {
