@@ -8,11 +8,20 @@ class Mario {
     this.defaultBottom = defaultBottom;
     this.isJumping = false;
 
-    this.element = document.createElement('div');
+    this.element = document.createElement('img');
+    this.element.src = '/assets/mario-stop.png';
     this.element.classList.add(className);
     this.element.style.bottom = defaultBottom + 'px';
 
     DomManager.gameArea.appendChild(this.element);
+  }
+
+  run() {
+    this.element.src = '/assets/mario-run.gif';
+  }
+
+  stop() {
+    this.element.src = '/assets/mario-stop.png';
   }
 
   jump() {

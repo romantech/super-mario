@@ -50,6 +50,7 @@ class Game {
     if (this.isPlaying) return;
     this.isPlaying = true;
 
+    this.mario.run();
     this.obstacles.moveAll();
     this.background.move();
     this.eventHandler.setupEventListeners();
@@ -60,6 +61,7 @@ class Game {
   stop(message = '') {
     this.isPlaying = false;
 
+    this.mario.stop();
     this.background.stop();
     this.obstacles.stopAll();
     this.eventHandler.removeEventListeners();
@@ -85,11 +87,14 @@ class Game {
       if (this.isColliding(marioRect, obstacleRect)) {
         this.toggleButtonActive(true);
         return this.stop(`Game Over! Your Score is ${this.score.score}`);
-      } else if (this.isPassed(marioRect, obstacleRect)) {
+      }
+
+      if (this.isPassed(marioRect, obstacleRect)) {
         this.lastPassedObstacle !== obstacle && this.score.add(obstacle.point);
         this.lastPassedObstacle = obstacle;
       }
     }
+
     this.collisionFrameId = requestAnimationFrame(this.checkCollision);
   }
 

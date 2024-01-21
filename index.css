@@ -9,8 +9,6 @@
 }
 
 .mario {
-  background-image: url('./assets/mario.png');
-  background-size: cover;
   width: 65px;
   height: 65px;
   position: absolute;
