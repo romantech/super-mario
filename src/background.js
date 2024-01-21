@@ -1,4 +1,4 @@
-import DomManager from './domManager.js';
+import DomManager from './dom-manager.js';
 
 class Background {
   constructor({ speed }) {

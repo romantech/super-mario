@@ -2,7 +2,7 @@ import Mario from './mario.js';
 import Background from './background.js';
 import ObstacleManager from './obstacle.js';
 import EventHandler from './event-handler.js';
-import DomManager from './domManager.js';
+import DomManager from './dom-manager.js';
 
 const generateRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;

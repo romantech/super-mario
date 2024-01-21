@@ -11,19 +11,20 @@
     <title>Super Mario</title>
   </head>
   <body>
-    <h2>Super Mario</h2>
-    <main class="game">
+    <main>
+      <h2>Super Mario</h2>
       <section class="control">
-        <div class="button-group">
+        <nav class="button-group">
           <button class="start-button" type="button">Start</button>
           <button class="stop-button" type="button">Stop</button>
-        </div>
+        </nav>
         <h3 class="score-heading">Score <span class="score">0</span></h3>
       </section>
+      <section class="game"></section>
+      <aside class="guide">
+        <p>Press <kbd>space</kbd> or <kbd>touch</kbd> to jump</p>
+      </aside>
     </main>
-    <span class="guide"
-      >Press <kbd>space</kbd> or <kbd>touch</kbd> to jump</span
-    >
     <script src="./main.js" type="module"></script>
   </body>
 </html>

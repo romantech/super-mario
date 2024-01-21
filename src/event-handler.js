@@ -1,3 +1,5 @@
+import DomManager from './dom-manager.js';
+
 export default class EventHandler {
   constructor(action) {
     this.action = action;
@@ -8,12 +10,14 @@ export default class EventHandler {
 
   setupEventListeners() {
     document.addEventListener('keydown', this.handleKeyDown);
-    document.addEventListener('touchstart', this.handleTouch);
+    DomManager.gameArea.addEventListener('touchstart', this.handleTouch, {
+      passive: false, // event.preventDefault() 호출할 것이라고 브라우저에게 알림
+    });
   }
 
   removeEventListeners() {
     document.removeEventListener('keydown', this.handleKeyDown);
-    document.removeEventListener('touchstart', this.handleTouch);
+    DomManager.gameArea.removeEventListener('touchstart', this.handleTouch);
   }
 
   handleKeyDown(e) {
