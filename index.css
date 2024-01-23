@@ -61,7 +61,12 @@ header {
   margin-left: auto;
 }
 
-.guide {
+.score-heading > .score {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+aside > .guide {
   padding: 6px 0;
   display: flex;
   align-items: center;

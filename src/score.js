@@ -22,8 +22,20 @@ class Score {
     this.updateDisplay();
   }
 
+  animateScore(element) {
+    element.style.transform = 'scale(1.5)';
+    setTimeout(() => {
+      element.style.transform = 'scale(1)';
+    }, 300);
+  }
+
+  updateDialogScore() {
+    DomManager.dialogScore.textContent = String(this.score.score);
+  }
+
   updateDisplay() {
-    DomManager.scores.forEach(el => (el.textContent = String(this.score)));
+    DomManager.score.textContent = String(this.score);
+    if (this.score > 0) this.animateScore(DomManager.score);
   }
 }
 

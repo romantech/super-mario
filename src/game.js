@@ -58,7 +58,7 @@ class Game {
     this.scheduleAddObstacle();
   }
 
-  stop(isFailed = false) {
+  stop() {
     if (!this.isPlaying) return;
     this.isPlaying = false;
 
@@ -68,8 +68,12 @@ class Game {
     this.eventHandler.removeEventListeners();
     cancelAnimationFrame(this.collisionFrameId);
     clearInterval(this.obstacleTimerId);
+  }
 
-    if (isFailed) DomManager.dialog.showModal();
+  failed() {
+    this.stop();
+    this.score.updateDialogScore();
+    DomManager.dialog.showModal();
   }
 
   scheduleAddObstacle() {
@@ -87,7 +91,7 @@ class Game {
 
       if (this.isColliding(marioRect, obstacleRect)) {
         this.toggleButtonActive(true);
-        return this.stop(true);
+        return this.failed();
       }
 
       if (this.isPassed(marioRect, obstacleRect)) {
