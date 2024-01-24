@@ -5,10 +5,15 @@ class ObstacleManager {
   frameId = null;
   isMonitoring = false;
 
+  constructor(options) {
+    this.defaultOptions = options;
+  }
+
   add() {
-    const obstacle = new Obstacle();
-    this.list.add(obstacle);
+    const obstacle = new Obstacle(this.defaultOptions);
     DomManager.gameArea.appendChild(obstacle.element);
+
+    this.list.add(obstacle);
     obstacle.move();
   }
 

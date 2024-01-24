@@ -20,7 +20,7 @@ class Game {
   constructor({ speed, defaultBottom }) {
     this.mario = new Mario({ defaultBottom });
     this.background = new Background({ speed });
-    this.obstacles = new ObstacleManager();
+    this.obstacles = new ObstacleManager({ speed, defaultBottom });
     this.score = new Score();
     this.eventHandler = new EventHandler(this);
 
