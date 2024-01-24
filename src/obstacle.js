@@ -54,7 +54,7 @@ class ObstacleManager {
 }
 
 class Obstacle {
-  constructor({ defaultBottom = 50, className = 'obstacle', speed = 5 } = {}) {
+  constructor({ defaultBottom, speed, className = 'obstacle' } = {}) {
     this.speed = speed;
     this.point = 1;
     this.frameId = null;
