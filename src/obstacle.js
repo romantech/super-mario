@@ -68,8 +68,9 @@ class Obstacle {
   }
 
   get isOutOfBounds() {
-    // 장애물이 왼쪽 끝에 도달하면 제거. window.innerWidth 값은 스크롤바를 포함한 뷰포트 사이즈
-    return this.currentPosition >= window.innerWidth;
+    // 장애물이 게임 화면 왼쪽 경계를 벗어나면 제거
+    // element.clientWidth 값은 요소의 내부 너비(padding 포함)
+    return this.currentPosition >= DomManager.gameArea.clientWidth;
   }
 
   get currentPosition() {
