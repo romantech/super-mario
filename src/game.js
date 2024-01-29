@@ -111,7 +111,7 @@ class Game {
      * */
     const isHorizontalOverlap =
       marioRect.left < obstacleRect.right && // 마리오가 장애물 오른쪽에서 겹치는 경우 검사
-      marioRect.right > obstacleRect.left; // 마리오가 장애믈 왼쪽에서 겹치는 경우 검사
+      marioRect.right > obstacleRect.left; // 마리오가 장애물 왼쪽에서 겹치는 경우 검사
 
     const isVerticalOverlap =
       marioRect.top < obstacleRect.bottom && // 마리오가 장애물 아래에서 겹치는 경우 검사

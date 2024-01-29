@@ -30,7 +30,7 @@ class Score {
   }
 
   updateDialogScore() {
-    DomManager.dialogScore.textContent = String(this.score.score);
+    DomManager.dialogScore.textContent = String(this.score);
   }
 
   updateDisplay() {
