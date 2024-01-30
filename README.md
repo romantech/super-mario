@@ -9,9 +9,12 @@ This is a Mario Runner game implemented in vanilla JavaScript without using Canv
 Additionally, a gravity effect has been implemented to make Mario's jumps look more natural.
 
 - [Game Link](https://romantech.github.io/super-mario)
-- [Implementation Details Korean Ver](https://bit.ly/3ShQQiC)
+- [Implementation Details Korean Ver](https://bit.ly/3ufjysq)
 
 ## Implementation Details
+- [Gravity Jump](#gravity-jump)
+- [Obstacle Collision Detection](#obstacle-collision-detection)
+
 ### Gravity Jump
 > [!NOTE]
 > After creating a new image element and assigning an image URL to its `src` attribute, the image loads in the background. Then, if the `src` attribute of another image element is set to a URL that has already been loaded, the browser will use the image stored in the cache.
