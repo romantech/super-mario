@@ -4,17 +4,17 @@
 
 # Simple Super Mario Runner Game
 
-This is a Mario Runner game implemented in vanilla JavaScript without using canvas. When the game starts, Mario automatically runs forward, and obstacles are randomly generated ahead. These obstacles can be avoided by jumping, which is done by pressing space (on PC) or touching (on Mobile). Every time you avoid an obstacle, the Score increases by 1 point. 
+This is a Mario Runner game implemented in vanilla JavaScript without using Canvas. When the game starts, Mario automatically runs forward, and obstacles are randomly generated ahead. These obstacles can be avoided by jumping, which is done by pressing space (on PC) or touching (on Mobile). Every time you avoid an obstacle, the Score increases by 1 point. 
 
 Additionally, a gravity effect has been implemented to make Mario's jumps look more natural.
 
-- Game Link : https://romantech.github.io/super-mario 
-- Implementation Guide (Korean Version) : https://bit.ly/3ShQQiC
+- [Game Link](https://romantech.github.io/super-mario)
+- [Implementation Details Korean Ver](https://bit.ly/3ShQQiC)
 
-# Implementation Details
-## Gravity Jump
+## Implementation Details
+### Gravity Jump
 > [!NOTE]
-> After creating a new image element and assigning an image URL to its `src` attribute, the image begins to load in the background. Then, if the `src` attribute of another image element is set to a URL that has already been loaded, the browser will use the image stored in the cache.
+> After creating a new image element and assigning an image URL to its `src` attribute, the image loads in the background. Then, if the `src` attribute of another image element is set to a URL that has already been loaded, the browser will use the image stored in the cache.
 ```jsx
 class Mario {
   static jumpHeight = 18; // Jump height. The higher the value, the higher the jump.
@@ -66,7 +66,7 @@ Below is a chart/image showing how the height changes with each frame. For clari
 
 ![image](https://github.com/romantech/super-mario/assets/8604840/8ba5952c-9a1f-4470-bc90-1d92555ae19c)
 
-The jump starts with the highest ascent, and as it approaches the peak, the ascent gradually decreases due to gravity until it's almost zero. After the peak, the ascent increases again until it returns to the original point.
+The jump starts with the highest ascent, and as it approaches the peak, the ascent gradually decreases due to gravity until it's almost zero. After the peak, the ascent increases until it returns to its original point.
 
 | Count | Velocity | Height (Count×Velocity) | Difference from Previous Height | Phase |
 | --- | --- | --- | --- | --- |
@@ -88,11 +88,11 @@ The jump starts with the highest ascent, and as it approaches the peak, the asce
 | 15 | 1 | 15 | 13 |  |
 | 16 | 0 | 0 | 15 | Returning to Starting Point |
 
-## Obstacle Collision Detection
+### Obstacle Collision Detection
 > [!NOTE]
 > If changes have been made to the DOM but have not yet been reflected on the screen, calling the `getBoundingClientRect()` method triggers a reflow (recalculation of layout). This happens because the browser needs to calculate the layout to provide accurate position and size information of the element. If there are no changes in the DOM and the browser has already calculated the latest layout information, a reflow does not occur.
 
-When the game starts, `the checkCollision()` method is called to check for collisions between Mario and all obstacle elements on every frame. If Mario collides with an obstacle, the game is halted.
+When the game starts, the `checkCollision()` method is called to check for collisions between Mario and all obstacle elements on every frame. If Mario collides with an obstacle, the game is halted.
 
 The position of each element is obtained by calling the `element.getBoundingClientRect()` method, which returns the coordinate values relative to the viewport.
 
