@@ -12,8 +12,40 @@ Additionally, a gravity effect has been implemented to make Mario's jumps look m
 - [Implementation Details Korean Ver](https://bit.ly/3ufjysq)
 
 ## Implementation Details
+- [Singleton DOM Management](#singleton-dom-management)
 - [Gravity Jump](#gravity-jump)
 - [Obstacle Collision Detection](#obstacle-collision-detection)
+
+### Singleton DOM Management
+> [!NOTE]
+> The constructor function essentially returns the newly created instance (this), but as shown below, it is also possible to explicitly specify a return value.
+```jsx
+class DomManager {
+  static instance = null;
+
+  constructor() {
+    if (DomManager.instance) return DomManager.instance;
+
+    this.gameArea = document.querySelector('.game');
+    this.dialog = document.querySelector('.dialog-failed');
+    // ...
+
+    DomManager.instance = this;
+  }
+
+  static getInstance() {
+    if (!DomManager.instance) DomManager.instance = new DomManager();
+    return DomManager.instance;
+  }
+}
+
+export default DomManager.getInstance();
+```
+Game elements frequently used in a game, such as the game area, score, start button, etc., are managed by a class called `DomManager`. Centralizing DOM-related tasks in one place like this can avoid repetitive queries and manipulations.
+
+The practice of creating only one instance of a class and sharing it across the entire application is called the singleton pattern. Exporting the DOM manager as a singleton allows for consistent access to the same instance throughout the project, enhancing consistency.
+
+When the `getInstance()` static method is called for the first time, there is no existing instance, so the `constructor` is executed to create a new instance, which is then assigned to the static property `DomManager.instance`. Subsequent calls to `getInstance()` return the existing instance that was previously assigned to the `DomManager.instance` property.
 
 ### Gravity Jump
 > [!NOTE]
