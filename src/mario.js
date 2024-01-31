@@ -1,4 +1,5 @@
 import DomManager from './dom-manager.js';
+import { loadImages } from './utils.js';
 
 class Mario {
   static jumpHeight = 18; // 점프 높이. 높을수록 더 높이 점프
@@ -8,19 +9,34 @@ class Mario {
   runImage = new Image();
   element = new Image();
 
-  constructor({ defaultBottom, className = 'mario' }) {
+  constructor({
+    defaultBottom,
+    className = 'mario',
+    imgSources = ['./assets/mario-stop.png', './assets/mario-run.gif'],
+  }) {
     this.defaultBottom = defaultBottom;
+    this.imgSources = imgSources;
     this.isJumping = false;
 
-    // image.src 속성에 값을 할당하면 백그라운드에서 이미지 로드 시작
-    this.stopImage.src = './assets/mario-stop.png';
-    this.runImage.src = './assets/mario-run.gif';
+    this.preloadImages().then(() => this.initializeImage(className));
+  }
 
-    this.element.src = this.stopImage.src; // 이미 로드한 이미지를 캐시에서 가져옴
+  initializeImage(className) {
+    this.element.src = this.stopImage.src;
     this.element.classList.add(className);
-    this.element.style.bottom = defaultBottom + 'px';
+    this.element.style.bottom = this.defaultBottom + 'px';
 
     DomManager.gameArea.appendChild(this.element);
+  }
+
+  async preloadImages() {
+    try {
+      const [stopImage, runImage] = await loadImages(this.imgSources);
+      this.stopImage.src = stopImage.src;
+      this.runImage.src = runImage.src;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   run() {

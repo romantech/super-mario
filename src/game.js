@@ -3,14 +3,11 @@ import {
   Background,
   DomManager,
   EventHandler,
+  generateRandomNumber,
   Mario,
   ObstacleManager,
   Score,
 } from './index.js';
-
-const generateRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
 
 class Game {
   isPlaying = false;
@@ -23,7 +20,7 @@ class Game {
     this.background = new Background({ speed });
     this.obstacles = new ObstacleManager({ speed, defaultBottom });
     this.score = new Score();
-    this.audioManager = new AudioManager();
+    this.audio = new AudioManager();
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
@@ -37,8 +34,8 @@ class Game {
     DomManager.restartButton.onclick = () => this.restart();
 
     DomManager.audioToggle.onclick = () => {
-      if (this.audioManager.audio.muted) this.audioManager.unmute();
-      else this.audioManager.mute();
+      if (this.audio.isMuted) this.audio.unmute();
+      else this.audio.mute();
     };
   }
 
