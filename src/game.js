@@ -1,4 +1,5 @@
 import {
+  AudioManager,
   Background,
   DomManager,
   EventHandler,
@@ -22,10 +23,23 @@ class Game {
     this.background = new Background({ speed });
     this.obstacles = new ObstacleManager({ speed, defaultBottom });
     this.score = new Score();
+    this.audioManager = new AudioManager();
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
     this.checkCollision = this.checkCollision.bind(this);
+    this.initializeController();
+  }
+
+  initializeController() {
+    DomManager.stopButton.onclick = () => this.stop();
+    DomManager.startButton.onclick = () => this.start();
+    DomManager.restartButton.onclick = () => this.restart();
+
+    DomManager.audioToggle.onclick = () => {
+      if (this.audioManager.audio.muted) this.audioManager.unmute();
+      else this.audioManager.mute();
+    };
   }
 
   toggleButtonActive(shouldRestart) {

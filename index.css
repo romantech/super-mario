@@ -1,3 +1,18 @@
+:root {
+  --text-white: #e3e3e3;
+  --bg-black: #231f20;
+}
+
+body {
+  background-color: var(--bg-black);
+}
+
+main {
+  max-width: 1024px;
+  margin: 0 auto;
+  color: var(--text-white);
+}
+
 .game {
   width: 100%;
   min-height: 440px;
@@ -32,8 +47,28 @@ header {
   justify-content: space-between;
 }
 
+.button-group {
+  display: flex;
+  gap: 6px;
+}
+
 .button-group > button {
   font-size: 1rem;
+  cursor: pointer;
+}
+
+.audio-toggle {
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  background-color: transparent;
+
+  width: 24px;
+  height: auto;
+  background-image: url('./assets/sound-off.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .github-link {
@@ -44,7 +79,7 @@ header {
 }
 
 .github-link > img {
-  width: 25px;
+  width: 24px;
   height: auto;
 }
 
@@ -56,7 +91,6 @@ header {
 }
 
 .score-heading {
-  color: white;
   width: fit-content;
   margin-left: auto;
 }
@@ -74,7 +108,7 @@ aside > .guide {
 }
 
 kbd {
-  background-color: #eee;
+  background-color: var(--text-white);
   border-radius: 3px;
   border: 1px solid #b4b4b4;
   box-shadow:

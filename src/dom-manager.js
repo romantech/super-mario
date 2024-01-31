@@ -13,6 +13,7 @@ class DomManager {
     this.stopButton = document.querySelector('.button-stop');
     this.startButton = document.querySelector('.button-start');
     this.restartButton = document.querySelector('.button-restart');
+    this.audioToggle = document.querySelector('.audio-toggle');
 
     DomManager.instance = this;
   }
