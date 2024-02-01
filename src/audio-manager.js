@@ -17,6 +17,7 @@ class AudioManager {
     this.audio.autoplay = autoplay;
     this.audio.loop = loop;
     this.audio.muted = muted;
+    this.jumpSound.volume = 0.5;
 
     this.preloadImages();
   }
