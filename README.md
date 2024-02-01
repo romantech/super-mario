@@ -1,10 +1,8 @@
-
-![20240121_211922](https://github.com/romantech/super-mario/assets/8604840/a429b9fb-51cc-47d8-af62-35ff9d07c125)
-
+![20240201_143744](https://github.com/romantech/super-mario/assets/8604840/cdc2048a-7222-4f47-86a4-0f26badaa695)
 
 # Simple Super Mario Runner Game
 
-This is a Mario Runner game implemented in vanilla JavaScript without using Canvas. When the game starts, Mario automatically runs forward, and obstacles are randomly generated ahead. These obstacles can be avoided by jumping, which is done by pressing space (on PC) or touching (on Mobile). Every time you avoid an obstacle, the Score increases by 1 point. 
+This is a Mario Runner game implemented in vanilla JavaScript without using Canvas. When the game starts, Mario automatically runs forward, and obstacles are randomly generated ahead. These obstacles can be avoided by jumping, which is done by pressing space (on PC) or touching (on Mobile). Every time you avoid an obstacle, the Score increases by 1 point.
 
 Additionally, a gravity effect has been implemented to make Mario's jumps look more natural.
 
@@ -12,13 +10,16 @@ Additionally, a gravity effect has been implemented to make Mario's jumps look m
 - [Implementation Details Korean Ver](https://bit.ly/3ufjysq)
 
 ## Implementation Details
+
 - [Singleton DOM Management](#singleton-dom-management)
 - [Gravity Jump](#gravity-jump)
 - [Obstacle Collision Detection](#obstacle-collision-detection)
 
 ### Singleton DOM Management
+
 > [!NOTE]
 > The constructor function essentially returns the newly created instance (this), but as shown below, it is also possible to explicitly specify a return value.
+
 ```jsx
 class DomManager {
   static instance = null;
@@ -41,6 +42,7 @@ class DomManager {
 
 export default DomManager.getInstance();
 ```
+
 Game elements frequently used in a game, such as the game area, score, start button, etc., are managed by a class called `DomManager`. Centralizing DOM-related tasks in one place like this can avoid repetitive queries and manipulations.
 
 The practice of creating only one instance of a class and sharing it across the entire application is called the singleton pattern. Exporting the DOM manager as a singleton allows for consistent access to the same instance throughout the project, enhancing consistency.
@@ -48,35 +50,37 @@ The practice of creating only one instance of a class and sharing it across the 
 When the `getInstance()` static method is called for the first time, there is no existing instance, so the `constructor` is executed to create a new instance, which is then assigned to the static property `DomManager.instance`. Subsequent calls to `getInstance()` return the existing instance that was previously assigned to the `DomManager.instance` property.
 
 ### Gravity Jump
+
 > [!NOTE]
 > After creating a new image element and assigning an image URL to its `src` attribute, the image loads in the background. Then, if the `src` attribute of another image element is set to a URL that has already been loaded, the browser will use the image stored in the cache.
+
 ```jsx
 class Mario {
-  static jumpHeight = 18; // Jump height. The higher the value, the higher the jump.
-  static gravity = 0.4; // Gravity. The lower the value, the longer the jump.
+  static JUMP_HEIGHT = 18; // Jump height. The higher the value, the higher the jump.
+  static GRAVITY = 0.4; // Gravity. The lower the value, the longer the jump.
 
-	// ...
+  audio;
+  defaultBottom;
+  isJumping = false;
+  // ...
 
-  constructor({ defaultBottom, className = 'mario' }) {
+  constructor({ audio, defaultBottom, className = 'mario' }) {
+    this.audio = audio;
     this.defaultBottom = defaultBottom;
-    this.isJumping = false;
-		// ...
+    // ...
   }
-
-  run() { /* ... */ }
-
-  stop() { /* ... */ }
 
   jump() {
     if (this.isJumping) return;
 
+    this.audio.playJumpSound();
     this.isJumping = true;
     let jumpCount = 0;
-    let velocity = Mario.jumpHeight;
+    let velocity = Mario.JUMP_HEIGHT;
 
     const up = () => {
       jumpCount++;
-      velocity = Math.max(velocity - Mario.gravity, 0);
+      velocity = Math.max(velocity - Mario.GRAVITY, 0);
 
       let nextBottom = jumpCount * velocity + this.defaultBottom;
       this.element.style.bottom = nextBottom + 'px';
@@ -87,15 +91,16 @@ class Mario {
 
     up();
   }
-}
+
+  // ...
 }
 ```
 
-When the user presses the spacebar, the `jump()` method is called. This method executes the `up()` function on every frame to simulate the jumping action. Within the `up()` function, `jumpCount` is incremented by 1, and `velocity` is decreased by the value of `Mario.gravity`.
+When the user presses the spacebar, the `jump()` method is called. This method executes the `up()` function on every frame to simulate the jumping action. Within the `up()` function, `jumpCount` is incremented by 1, and `velocity` is decreased by the value of `Mario.GRAVITY`.
 
 Then, the product of the reduced `velocity` and `jumpCount` is calculated, and this result is added to Mario's default height, `defaultBottom`, to determine the jump height for the current frame, `nextBottom`. The jump ends when `nextBottom` is less than or equal to `defaultBottom`.
 
-Since `velocity` decreases by `gravity` every frame, the jump quickly ascends, then gradually slows down, and after reaching the peak, it descends rapidly, simulating the effect of gravity.
+Since `velocity` decreases by `Mario.GRAVITY` every frame, the jump quickly ascends, then gradually slows down. As the `jumpCount` increases, after reaching the peak, it descends rapidly, simulating the effect of gravity.
 
 Below is a chart/image showing how the height changes with each frame. For clarity, `velocity` is reduced by 1 in each frame, and `defaultBottom` is not included in the height calculation.
 
@@ -103,27 +108,28 @@ Below is a chart/image showing how the height changes with each frame. For clari
 
 The jump starts with the highest ascent, and as it approaches the peak, the ascent gradually decreases due to gravity until it's almost zero. After the peak, the ascent increases until it returns to its original point.
 
-| Count | Velocity | Height (Count×Velocity) | Difference from Previous Height | Phase |
-| --- | --- | --- | --- | --- |
-| 0 | 16 | 0 | 0 | Starting Point |
-| 1 | 15 | 15 | 15 | Start of Ascent |
-| 2 | 14 | 28 | 13 |  |
-| 3 | 13 | 39 | 11 | Beginning to Slow Down |
-| 4 | 12 | 48 | 9 |  |
-| 5 | 11 | 55 | 7 |  |
-| 6 | 10 | 60 | 5 |  |
-| 7 | 9 | 63 | 3 |  |
-| 8 | 8 | 64 | 1 | Peak |
-| 9 | 7 | 63 | 1 | Start of Descent |
-| 10 | 6 | 60 | 3 | Beginning to Speed Up |
-| 11 | 5 | 55 | 5 |  |
-| 12 | 4 | 48 | 7 |  |
-| 13 | 3 | 39 | 9 |  |
-| 14 | 2 | 28 | 11 |  |
-| 15 | 1 | 15 | 13 |  |
-| 16 | 0 | 0 | 15 | Returning to Starting Point |
+| Count | Velocity | Height (Count × Velocity) | Difference from Previous Height | Phase                       |
+| ----- | -------- | ------------------------- | ------------------------------- | --------------------------- |
+| 0     | 16       | 0                         | 0                               | Starting Point              |
+| 1     | 15       | 15                        | 15                              | Start of Ascent             |
+| 2     | 14       | 28                        | 13                              |                             |
+| 3     | 13       | 39                        | 11                              | Beginning to Slow Down      |
+| 4     | 12       | 48                        | 9                               |                             |
+| 5     | 11       | 55                        | 7                               |                             |
+| 6     | 10       | 60                        | 5                               |                             |
+| 7     | 9        | 63                        | 3                               |                             |
+| 8     | 8        | 64                        | 1                               | Peak                        |
+| 9     | 7        | 63                        | 1                               | Start of Descent            |
+| 10    | 6        | 60                        | 3                               | Beginning to Speed Up       |
+| 11    | 5        | 55                        | 5                               |                             |
+| 12    | 4        | 48                        | 7                               |                             |
+| 13    | 3        | 39                        | 9                               |                             |
+| 14    | 2        | 28                        | 11                              |                             |
+| 15    | 1        | 15                        | 13                              |                             |
+| 16    | 0        | 0                         | 15                              | Returning to Starting Point |
 
 ### Obstacle Collision Detection
+
 > [!NOTE]
 > If changes have been made to the DOM but have not yet been reflected on the screen, calling the `getBoundingClientRect()` method triggers a reflow (recalculation of layout). This happens because the browser needs to calculate the layout to provide accurate position and size information of the element. If there are no changes in the DOM and the browser has already calculated the latest layout information, a reflow does not occur.
 
@@ -133,24 +139,19 @@ The position of each element is obtained by calling the `element.getBoundingClie
 
 ```jsx
 class Game {
-  collisionFrameId = null;
   // ...
+  collisionFrameId = null;
 
-  constructor({ speed, defaultBottom }) {
-    this.mario = new Mario({ defaultBottom });
+  constructor({ speed = Game.DEFAULT_SPEED, defaultBottom = Game.DEFAULT_BOTTOM } = {}) {
     this.obstacles = new ObstacleManager({ speed, defaultBottom });
+    this.mario = new Mario({ defaultBottom, audio: this.audio });
     // ...
   }
 
-  start() { 
+  start() {
     // ...
     this.checkCollision();
   }
-
-  stop() { /* ... */ }
-  failed() { /* ... */ }
-  reset() { /* ... */ }
-  restart() { /* ... */ }
 
   checkCollision() {
     for (let obstacle of this.obstacles.list) {
@@ -180,9 +181,7 @@ class Game {
     return isHorizontalOverlap && isVerticalOverlap;
   }
 
-  toggleButtonActive(shouldRestart) { /* ... */ }
-  scheduleAddObstacle() { /* ... */ }
-  isPassed(marioRect, obstacleRect) { /* ... */ }
+  // ...
 }
 ```
 
