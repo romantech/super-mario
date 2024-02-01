@@ -50,7 +50,7 @@ header {
 
 .button-group {
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 
 .button-group > button {
