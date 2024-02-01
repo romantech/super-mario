@@ -42,6 +42,7 @@ class AudioManager {
 
   playJumpSound() {
     if (this.isMuted) return;
+    this.jumpSound.currentTime = 0; // 재생 위치를 처음으로 설정
     this.jumpSound.play();
   }
 
