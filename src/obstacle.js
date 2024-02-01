@@ -4,13 +4,14 @@ class ObstacleManager {
   list = new Set();
   frameId = null;
   isMonitoring = false;
+  options;
 
   constructor(options) {
-    this.defaultOptions = options;
+    this.options = options;
   }
 
   add() {
-    const obstacle = new Obstacle(this.defaultOptions);
+    const obstacle = new Obstacle(this.options);
     DomManager.gameArea.appendChild(obstacle.element);
 
     this.list.add(obstacle);

@@ -10,17 +10,30 @@ import {
 } from './index.js';
 
 class Game {
+  static DEFAULT_SPEED = 5;
+  static DEFAULT_BOTTOM = 50;
+
   isPlaying = false;
   obstacleTimerId = null;
   collisionFrameId = null;
   lastPassedObstacle = null;
 
-  constructor({ speed, defaultBottom }) {
-    this.mario = new Mario({ defaultBottom });
+  audio;
+  score;
+  mario;
+  background;
+  obstacles;
+  eventHandler;
+
+  constructor({
+    speed = Game.DEFAULT_SPEED,
+    defaultBottom = Game.DEFAULT_BOTTOM,
+  } = {}) {
+    this.audio = new AudioManager();
+    this.score = new Score();
     this.background = new Background({ speed });
     this.obstacles = new ObstacleManager({ speed, defaultBottom });
-    this.score = new Score();
-    this.audio = new AudioManager();
+    this.mario = new Mario({ defaultBottom, audio: this.audio });
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩

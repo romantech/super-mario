@@ -2,25 +2,21 @@ import DomManager from './dom-manager.js';
 import { loadImages } from './utils.js';
 
 class AudioManager {
+  static SOUND_ON_PATH = './assets/sound-on.png';
+  static SOUND_OFF_PATH = './assets/sound-off.png';
+  static JUMP_SOUND_PATH = './assets/audio/jump-sound.mp3';
+  static BGM_PATH = './assets/audio/bgm.mp3';
+
   soundOnImage = new Image();
   soundOffImage = new Image();
 
-  constructor({
-    filePath = './assets/mario-bgm.mp3',
-    iconSources = ['./assets/sound-on.png', './assets/sound-off.png'],
-    autoplay = true,
-    loop = true,
-    muted = true,
-  } = {}) {
-    this.audio = new Audio(filePath);
+  audio = new Audio(AudioManager.BGM_PATH);
+  jumpSound = new Audio(AudioManager.JUMP_SOUND_PATH);
+
+  constructor({ autoplay = true, loop = true, muted = true } = {}) {
     this.audio.autoplay = autoplay;
     this.audio.loop = loop;
     this.audio.muted = muted;
-    this.iconSources = iconSources;
-
-    this.audio.onerror = () => {
-      console.error('Failed to load audio:', filePath);
-    };
 
     this.preloadImages();
   }
@@ -34,17 +30,25 @@ class AudioManager {
   }
 
   async preloadImages() {
+    const srcset = [AudioManager.SOUND_ON_PATH, AudioManager.SOUND_OFF_PATH];
     try {
-      const [soundOn, soundOff] = await loadImages(this.iconSources);
+      const [soundOn, soundOff] = await loadImages(srcset);
       this.soundOnImage.src = soundOn.src;
       this.soundOffImage.src = soundOff.src;
     } catch (error) {
-      console.error(error);
+      console.error('Error preloading audio images:', error);
     }
   }
 
+  playJumpSound() {
+    if (this.isMuted) return;
+    this.jumpSound.play();
+  }
+
   #toggleIcon() {
-    const src = this.isMuted ? this.iconSources[1] : this.iconSources[0];
+    const src = this.isMuted
+      ? AudioManager.SOUND_OFF_PATH
+      : AudioManager.SOUND_ON_PATH;
     DomManager.audioToggle.style.backgroundImage = `url(${src})`;
   }
 

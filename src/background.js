@@ -1,10 +1,12 @@
 import DomManager from './dom-manager.js';
 
 class Background {
+  speed;
+  positionX = 0;
+  frameId = null;
+
   constructor({ speed }) {
     this.speed = speed;
-    this.positionX = 0;
-    this.frameId = null;
     this.move = this.move.bind(this);
   }
 

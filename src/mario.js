@@ -2,40 +2,43 @@ import DomManager from './dom-manager.js';
 import { loadImages } from './utils.js';
 
 class Mario {
-  static jumpHeight = 18; // 점프 높이. 높을수록 더 높이 점프
-  static gravity = 0.4; // 중력 가속도. 낮을수록 더 오래 점프
+  static JUMP_HEIGHT = 18; // 점프 높이. 높을수록 더 높이 점프
+  static GRAVITY = 0.4; // 중력 가속도. 낮을수록 더 오래 점프
+  static STOP_IMAGE_PATH = './assets/mario-stop.png';
+  static RUN_IMAGE_PATH = './assets/mario-run.gif';
 
   stopImage = new Image();
   runImage = new Image();
   element = new Image();
 
-  constructor({
-    defaultBottom,
-    className = 'mario',
-    imgSources = ['./assets/mario-stop.png', './assets/mario-run.gif'],
-  }) {
-    this.defaultBottom = defaultBottom;
-    this.imgSources = imgSources;
-    this.isJumping = false;
+  audio;
+  defaultBottom;
+  isJumping = false;
 
-    this.preloadImages().then(() => this.initializeImage(className));
+  constructor({ audio, defaultBottom, className = 'mario' }) {
+    this.audio = audio;
+    this.defaultBottom = defaultBottom;
+
+    this.preloadImages()
+      .then(() => this.initializeImage(className))
+      .catch(error => console.error('Error initializing Mario:', error));
   }
 
   initializeImage(className) {
     this.element.src = this.stopImage.src;
     this.element.classList.add(className);
     this.element.style.bottom = this.defaultBottom + 'px';
-
     DomManager.gameArea.appendChild(this.element);
   }
 
   async preloadImages() {
+    const srcset = [Mario.STOP_IMAGE_PATH, Mario.RUN_IMAGE_PATH];
     try {
-      const [stopImage, runImage] = await loadImages(this.imgSources);
+      const [stopImage, runImage] = await loadImages(srcset);
       this.stopImage.src = stopImage.src;
       this.runImage.src = runImage.src;
     } catch (error) {
-      console.error(error);
+      console.error('Error preloading Mario images:', error);
     }
   }
 
@@ -50,9 +53,10 @@ class Mario {
   jump() {
     if (this.isJumping) return;
 
+    this.audio.playJumpSound();
     this.isJumping = true;
     let jumpCount = 0;
-    let velocity = Mario.jumpHeight;
+    let velocity = Mario.JUMP_HEIGHT;
 
     /**
      * 상승(Fast) -> 정점(Slow) -> 하강(Fast) 중력 작용이 유사하게 적용된 점프 메서드
@@ -70,7 +74,7 @@ class Mario {
      * */
     const up = () => {
       jumpCount++;
-      velocity = Math.max(velocity - Mario.gravity, 0);
+      velocity = Math.max(velocity - Mario.GRAVITY, 0);
 
       let nextBottom = jumpCount * velocity + this.defaultBottom;
       this.element.style.bottom = nextBottom + 'px';

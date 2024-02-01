@@ -2,7 +2,7 @@ export const generateRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const loadImages = src => {
+export const loadImages = srcset => {
   // image.src 속성에 값을 할당하면 백그라운드에서 이미지 로드 시작
   const loadImage = src => {
     return new Promise((resolve, reject) => {
@@ -13,5 +13,5 @@ export const loadImages = src => {
     });
   };
 
-  return Promise.all(src.map(loadImage));
+  return Promise.all(srcset.map(loadImage));
 };
