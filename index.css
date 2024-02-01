@@ -1,6 +1,7 @@
 :root {
-  --text-white: #e3e3e3;
-  --bg-black: #231f20;
+  --text-white: #f5f5f5;
+  --bg-black: #18314f;
+  --bg-blue: #6990f6;
 }
 
 body {
@@ -49,22 +50,22 @@ header {
 
 .button-group {
   display: flex;
-  gap: 6px;
+  gap: 2px;
 }
 
 .button-group > button {
-  font-size: 1rem;
+  font-size: 0.8rem;
   cursor: pointer;
 }
 
 .audio-toggle {
   border: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 0 4px;
   text-decoration: none;
   background-color: transparent;
 
-  width: 24px;
+  width: 20px;
   height: auto;
   background-image: url('./assets/sound-off.png');
   background-size: cover;
@@ -79,12 +80,13 @@ header {
 }
 
 .github-link > img {
-  width: 24px;
+  width: 28px;
   height: auto;
 }
 
 .control {
-  background-color: #6990f6;
+  background-color: var(--bg-blue);
+  border-bottom: #5c84f5 1px solid;
   display: flex;
   align-items: center;
   padding: 0 1rem;
