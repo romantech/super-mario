@@ -33,13 +33,25 @@ main {
 }
 
 .obstacle {
-  background-image: url('./assets/obstacle.png');
   background-size: 100%;
   background-repeat: no-repeat;
   position: absolute;
   bottom: 0;
   width: 50px;
   height: 49px;
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
 }
 
 header {
