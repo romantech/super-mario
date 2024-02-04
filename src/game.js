@@ -128,14 +128,13 @@ class Game {
           case 'obstacle': {
             this.toggleButtonActive(true);
             this.failed();
-            break;
+            return; // checkCollision() 반복 호출 종료
           }
           case 'coin': {
             this.audio.playEffect('coin');
             this.score.add(entity.point);
             entity.touched = true;
             entity.hide(entity);
-            break;
           }
         }
       }
@@ -159,10 +158,6 @@ class Game {
       marioRect.bottom > entityRect.top; // 마리오가 장애물 위에서 겹치는 경우 검사
 
     return isHorizontalOverlap && isVerticalOverlap;
-  }
-
-  isPassed(marioRect, obstacleRect) {
-    return marioRect.left > obstacleRect.right; // 마리오가 장애물 넘었는지 확인
   }
 }
 
