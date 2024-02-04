@@ -53,7 +53,7 @@ class Mario {
   jump() {
     if (this.isJumping) return;
 
-    this.audio.playJumpSound();
+    this.audio.playEffect('jump');
     this.isJumping = true;
     let jumpCount = 0;
     let velocity = Mario.JUMP_HEIGHT;
