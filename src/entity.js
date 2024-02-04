@@ -7,10 +7,10 @@ class EntityManager {
   list = new Set();
   frameId = null;
   isMonitoring = false;
-  option;
+  defaultOption;
 
-  constructor(option) {
-    this.option = option;
+  constructor(defaultOption) {
+    this.defaultOption = defaultOption;
   }
 
   add(objectType, withObstacle = false) {
@@ -18,11 +18,11 @@ class EntityManager {
 
     switch (objectType) {
       case 'obstacle': {
-        entity = new Obstacle(this.option);
+        entity = new Obstacle(this.defaultOption);
         break;
       }
       case 'coin': {
-        entity = new Coin(this.option, withObstacle);
+        entity = new Coin(this.defaultOption, withObstacle);
         break;
       }
     }
@@ -57,7 +57,11 @@ class EntityManager {
   }
 
   moveAll() {
-    this.list.forEach(entity => entity.move());
+    this.list.forEach(entity => {
+      if (entity.type === 'coin') entity.animate();
+      entity.move();
+    });
+
     if (!this.isMonitoring) {
       this.isMonitoring = true;
       this.offScreenMonitor();
@@ -65,19 +69,28 @@ class EntityManager {
   }
 
   stopAll() {
-    this.list.forEach(entity => entity.stop());
+    this.list.forEach(entity => {
+      entity.pauseAnimate();
+      entity.stop();
+    });
+
     if (this.isMonitoring) {
-      cancelAnimationFrame(this.frameId);
       this.isMonitoring = false;
+      cancelAnimationFrame(this.frameId);
     }
   }
 }
 
 class Entity {
-  constructor({ bottom, speed, className }) {
+  type;
+  speed;
+  point = 0;
+  frameId = null;
+
+  constructor({ bottom, speed, type, point = 0, className = 'obstacle' }) {
+    this.type = type;
     this.speed = speed;
-    this.frameId = null;
-    this.point = 0;
+    this.point = point;
 
     this.element = document.createElement('div');
     this.element.classList.add(className);
@@ -97,6 +110,14 @@ class Entity {
     return parseInt(this.element.style.right, 10); // parseInt('10.5px') => 10
   }
 
+  animate() {
+    this.element.classList.add('spin');
+  }
+
+  pauseAnimate() {
+    this.element.classList.remove('spin');
+  }
+
   move() {
     const nextRight = this.currentPosition + this.speed;
     this.element.style.right = nextRight + 'px'; // 장애물을 왼쪽으로 이동
@@ -112,13 +133,12 @@ class Obstacle extends Entity {
   static GOOMBA_IMG_PATH = './assets/goomba.png';
   static PIRANHA_IMG_PATH = './assets/piranha.png';
 
-  constructor(option) {
-    super({ ...option, className: 'obstacle' });
+  constructor(defaultOption) {
+    super({ ...defaultOption, type: 'obstacle' });
 
     const imgSet = [Obstacle.GOOMBA_IMG_PATH, Obstacle.PIRANHA_IMG_PATH];
     const imgPath = imgSet[generateRandomNumber(0, imgSet.length - 1)];
 
-    this.type = 'obstacle';
     this.element.style.backgroundImage = `url(${imgPath})`;
   }
 }
@@ -127,19 +147,21 @@ class Coin extends Entity {
   static IMG_PATH = './assets/coin.png';
   static POINT_EASY = 1;
   static POINT_MEDIUM = 5;
+  static MAX_BOTTOM = 240;
 
-  constructor(option, withObstacle) {
-    const minBottom = withObstacle ? option.bottom + 100 : option.bottom;
+  constructor(defaultOption, withObstacle) {
+    const bottomOffset = defaultOption.bottom;
+    const minBottom = withObstacle ? bottomOffset + 100 : bottomOffset;
 
     super({
-      ...option,
-      className: 'coin',
-      bottom: generateRandomNumber(minBottom, 240),
+      ...defaultOption,
+      type: 'coin',
+      point: withObstacle ? Coin.POINT_MEDIUM : Coin.POINT_EASY,
+      bottom: generateRandomNumber(minBottom, Coin.MAX_BOTTOM),
     });
 
     this.element.style.backgroundImage = `url(${Coin.IMG_PATH})`;
-    this.point = withObstacle ? Coin.POINT_MEDIUM : Coin.POINT_EASY;
-    this.type = 'coin';
+    this.element.classList.add('spin');
   }
 }
 

@@ -32,8 +32,7 @@ main {
   z-index: 1;
 }
 
-.obstacle,
-.coin {
+.obstacle {
   background-size: 100%;
   background-repeat: no-repeat;
   position: absolute;
@@ -42,7 +41,7 @@ main {
   height: 49px;
 }
 
-.coin {
+.spin {
   animation: spin 2s linear infinite;
 }
 
