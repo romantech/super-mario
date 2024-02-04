@@ -2,10 +2,10 @@ import {
   AudioManager,
   Background,
   DomManager,
+  EntityManager,
   EventHandler,
   generateRandomNumber,
   Mario,
-  ObstacleManager,
   Score,
 } from './index.js';
 
@@ -16,24 +16,23 @@ class Game {
   isPlaying = false;
   obstacleTimerId = null;
   collisionFrameId = null;
-  lastPassedObstacle = null;
 
   audio;
   score;
   mario;
   background;
-  obstacles;
+  entityList;
   eventHandler;
 
   constructor({
     speed = Game.DEFAULT_SPEED,
-    defaultBottom = Game.DEFAULT_BOTTOM,
+    bottom = Game.DEFAULT_BOTTOM,
   } = {}) {
     this.audio = new AudioManager();
     this.score = new Score();
     this.background = new Background({ speed });
-    this.obstacles = new ObstacleManager({ speed, defaultBottom });
-    this.mario = new Mario({ defaultBottom, audio: this.audio });
+    this.entityList = new EntityManager({ speed, bottom });
+    this.mario = new Mario({ bottom, audio: this.audio });
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
@@ -59,7 +58,7 @@ class Game {
   }
 
   reset() {
-    this.obstacles.reset();
+    this.entityList.reset();
     this.background.reset();
     this.score.reset();
   }
@@ -75,11 +74,11 @@ class Game {
     this.isPlaying = true;
 
     this.mario.run();
-    this.obstacles.moveAll();
+    this.entityList.moveAll();
     this.background.move();
     this.eventHandler.setupEventListeners();
     this.checkCollision();
-    this.scheduleAddObstacle();
+    this.scheduleAddEntity();
   }
 
   stop() {
@@ -87,7 +86,7 @@ class Game {
     this.isPlaying = false;
 
     this.mario.stop();
-    this.obstacles.stopAll();
+    this.entityList.stopAll();
     this.background.stop();
     this.eventHandler.removeEventListeners();
     cancelAnimationFrame(this.collisionFrameId);
@@ -100,46 +99,58 @@ class Game {
     DomManager.dialog.showModal();
   }
 
-  scheduleAddObstacle() {
+  scheduleAddEntity() {
     const randomInterval = generateRandomNumber(600, 1800);
+
     this.obstacleTimerId = setTimeout(() => {
-      this.obstacles.add();
-      if (this.isPlaying) this.scheduleAddObstacle();
+      const entityTypesLen = EntityManager.ENTITY_TYPES.length;
+      const idx = generateRandomNumber(0, entityTypesLen - 1);
+      const entityType = EntityManager.ENTITY_TYPES[idx];
+
+      if (entityType === 'both') {
+        this.entityList.add('coin', true);
+        this.entityList.add('obstacle');
+      } else {
+        this.entityList.add(entityType);
+      }
+
+      if (this.isPlaying) this.scheduleAddEntity();
     }, randomInterval);
   }
 
   checkCollision() {
-    for (let obstacle of this.obstacles.list) {
+    for (let entity of this.entityList.list) {
       const marioRect = this.mario.element.getBoundingClientRect();
-      const obstacleRect = obstacle.element.getBoundingClientRect();
+      const entityRect = entity.element.getBoundingClientRect();
 
-      if (this.isColliding(marioRect, obstacleRect)) {
-        this.toggleButtonActive(true);
-        return this.failed();
-      }
-
-      if (this.isPassed(marioRect, obstacleRect)) {
-        this.lastPassedObstacle !== obstacle && this.score.add(obstacle.point);
-        this.lastPassedObstacle = obstacle;
+      if (this.isColliding(marioRect, entityRect)) {
+        if (entity.type === 'obstacle') {
+          this.toggleButtonActive(true);
+          return this.failed();
+        } else if (entity.type === 'coin') {
+          this.audio.playEffect('coin');
+          this.score.add(entity.point);
+          this.entityList.remove(entity);
+        }
       }
     }
 
     this.collisionFrameId = requestAnimationFrame(this.checkCollision);
   }
 
-  isColliding(marioRect, obstacleRect) {
+  isColliding(marioRect, entityRect) {
     /*
      * 수평 충돌 상활
      * Mario: |-----|
      * Obstacle:   |-----|
      * */
     const isHorizontalOverlap =
-      marioRect.left < obstacleRect.right && // 마리오가 장애물 오른쪽에서 겹치는 경우 검사
-      marioRect.right > obstacleRect.left; // 마리오가 장애물 왼쪽에서 겹치는 경우 검사
+      marioRect.left < entityRect.right && // 마리오가 장애물 오른쪽에서 겹치는 경우 검사
+      marioRect.right > entityRect.left; // 마리오가 장애물 왼쪽에서 겹치는 경우 검사
 
     const isVerticalOverlap =
-      marioRect.top < obstacleRect.bottom && // 마리오가 장애물 아래에서 겹치는 경우 검사
-      marioRect.bottom > obstacleRect.top; // 마리오가 장애물 위에서 겹치는 경우 검사
+      marioRect.top < entityRect.bottom && // 마리오가 장애물 아래에서 겹치는 경우 검사
+      marioRect.bottom > entityRect.top; // 마리오가 장애물 위에서 겹치는 경우 검사
 
     return isHorizontalOverlap && isVerticalOverlap;
   }
