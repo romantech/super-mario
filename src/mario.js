@@ -12,12 +12,12 @@ class Mario {
   element = new Image();
 
   audio;
-  defaultBottom;
+  bottom;
   isJumping = false;
 
-  constructor({ audio, defaultBottom, className = 'mario' }) {
+  constructor({ audio, bottom, className = 'mario' }) {
     this.audio = audio;
-    this.defaultBottom = defaultBottom;
+    this.bottom = bottom;
 
     this.preloadImages()
       .then(() => this.initializeImage(className))
@@ -27,7 +27,7 @@ class Mario {
   initializeImage(className) {
     this.element.src = this.stopImage.src;
     this.element.classList.add(className);
-    this.element.style.bottom = this.defaultBottom + 'px';
+    this.element.style.bottom = this.bottom + 'px';
     DomManager.gameArea.appendChild(this.element);
   }
 
@@ -76,10 +76,10 @@ class Mario {
       jumpCount++;
       velocity = Math.max(velocity - Mario.GRAVITY, 0);
 
-      let nextBottom = jumpCount * velocity + this.defaultBottom;
+      let nextBottom = jumpCount * velocity + this.bottom;
       this.element.style.bottom = nextBottom + 'px';
 
-      if (nextBottom > this.defaultBottom) requestAnimationFrame(up);
+      if (nextBottom > this.bottom) requestAnimationFrame(up);
       else this.isJumping = false;
     };
 

@@ -2,25 +2,27 @@ import DomManager from './dom-manager.js';
 import { generateRandomNumber } from './utils.js';
 
 class EntityManager {
+  static ENTITY_TYPES = ['obstacle', 'coin', 'both'];
+
   list = new Set();
   frameId = null;
   isMonitoring = false;
-  options;
+  option;
 
-  constructor(options) {
-    this.options = options;
+  constructor(option) {
+    this.option = option;
   }
 
-  add(objectType) {
+  add(objectType, withObstacle = false) {
     let entity;
 
     switch (objectType) {
       case 'obstacle': {
-        entity = new Obstacle(this.options);
+        entity = new Obstacle(this.option);
         break;
       }
       case 'coin': {
-        entity = new Coin(this.options);
+        entity = new Coin(this.option, withObstacle);
         break;
       }
     }
@@ -72,14 +74,14 @@ class EntityManager {
 }
 
 class Entity {
-  constructor({ defaultBottom, speed, className }) {
+  constructor({ bottom, speed, className }) {
     this.speed = speed;
     this.frameId = null;
     this.point = 0;
 
     this.element = document.createElement('div');
     this.element.classList.add(className);
-    this.element.style.bottom = defaultBottom + 'px';
+    this.element.style.bottom = bottom + 'px';
     this.element.style.right = '-100px'; // 장애물 생성을 자연스럽게 하기 위해 초기값을 더 오른쪽으로 지정
 
     this.move = this.move.bind(this);
@@ -110,8 +112,8 @@ class Obstacle extends Entity {
   static GOOMBA_IMG_PATH = './assets/goomba.png';
   static PIRANHA_IMG_PATH = './assets/piranha.png';
 
-  constructor(options) {
-    super({ ...options, className: 'obstacle' });
+  constructor(option) {
+    super({ ...option, className: 'obstacle' });
 
     const imgSet = [Obstacle.GOOMBA_IMG_PATH, Obstacle.PIRANHA_IMG_PATH];
     const imgPath = imgSet[generateRandomNumber(0, imgSet.length - 1)];
@@ -123,16 +125,20 @@ class Obstacle extends Entity {
 
 class Coin extends Entity {
   static IMG_PATH = './assets/coin.png';
+  static POINT_EASY = 1;
+  static POINT_MEDIUM = 5;
 
-  constructor(options) {
+  constructor(option, withObstacle) {
+    const minBottom = withObstacle ? option.bottom + 100 : option.bottom;
+
     super({
-      ...options,
+      ...option,
       className: 'coin',
-      defaultBottom: generateRandomNumber(options.defaultBottom, 220),
+      bottom: generateRandomNumber(minBottom, 240),
     });
 
     this.element.style.backgroundImage = `url(${Coin.IMG_PATH})`;
-    this.point = 1;
+    this.point = withObstacle ? Coin.POINT_MEDIUM : Coin.POINT_EASY;
     this.type = 'coin';
   }
 }

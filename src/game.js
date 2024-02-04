@@ -16,7 +16,6 @@ class Game {
   isPlaying = false;
   obstacleTimerId = null;
   collisionFrameId = null;
-  lastPassedObstacle = null;
 
   audio;
   score;
@@ -27,13 +26,13 @@ class Game {
 
   constructor({
     speed = Game.DEFAULT_SPEED,
-    defaultBottom = Game.DEFAULT_BOTTOM,
+    bottom = Game.DEFAULT_BOTTOM,
   } = {}) {
     this.audio = new AudioManager();
     this.score = new Score();
     this.background = new Background({ speed });
-    this.entityList = new EntityManager({ speed, defaultBottom });
-    this.mario = new Mario({ defaultBottom, audio: this.audio });
+    this.entityList = new EntityManager({ speed, bottom });
+    this.mario = new Mario({ bottom, audio: this.audio });
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩
@@ -102,9 +101,19 @@ class Game {
 
   scheduleAddEntity() {
     const randomInterval = generateRandomNumber(600, 1800);
+
     this.obstacleTimerId = setTimeout(() => {
-      const entityType = generateRandomNumber(0, 1) === 0 ? 'coin' : 'obstacle';
-      this.entityList.add(entityType);
+      const entityTypesLen = EntityManager.ENTITY_TYPES.length;
+      const idx = generateRandomNumber(0, entityTypesLen - 1);
+      const entityType = EntityManager.ENTITY_TYPES[idx];
+
+      if (entityType === 'both') {
+        this.entityList.add('coin', true);
+        this.entityList.add('obstacle');
+      } else {
+        this.entityList.add(entityType);
+      }
+
       if (this.isPlaying) this.scheduleAddEntity();
     }, randomInterval);
   }
