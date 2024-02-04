@@ -32,7 +32,7 @@ class Game {
     this.score = new Score();
     this.background = new Background({ speed });
     this.entityManager = new EntityManager({ speed, bottom });
-    this.mario = new Mario({ bottom, audio: this.audio });
+    this.mario = new Mario({ bottom });
     this.eventHandler = new EventHandler(this);
 
     // 동일한 참조의 이벤트 핸들러를 사용해야 이벤트를 제거할 수 있으므로 this.handleKeyDown 메서드 바인딩

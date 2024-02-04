@@ -11,12 +11,10 @@ class Mario {
   runImage = new Image();
   element = new Image();
 
-  audio;
   bottom;
   isJumping = false;
 
-  constructor({ audio, bottom, className = 'mario' }) {
-    this.audio = audio;
+  constructor({ bottom, className = 'mario' }) {
     this.bottom = bottom;
 
     this.preloadImages()
@@ -53,7 +51,6 @@ class Mario {
   jump() {
     if (this.isJumping) return;
 
-    this.audio.playEffect('jump');
     this.isJumping = true;
     let jumpCount = 0;
     let velocity = Mario.JUMP_HEIGHT;

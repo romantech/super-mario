@@ -4,8 +4,8 @@ import { loadImages } from './utils.js';
 class AudioManager {
   static SOUND_ON_PATH = './assets/sound-on.png';
   static SOUND_OFF_PATH = './assets/sound-off.png';
-  static JUMP_SOUND_PATH = './assets/audio/jump-sound.mp3';
-  static COIN_SOUND_PATH = './assets/audio/coin-sound.mp3';
+  static JUMP_SOUND_PATH = './assets/audio/jump.mp3';
+  static COIN_SOUND_PATH = './assets/audio/coin.mp3';
   static BGM_PATH = './assets/audio/bgm.mp3';
 
   soundOnImage = new Image();
@@ -19,8 +19,12 @@ class AudioManager {
     this.audio.autoplay = autoplay;
     this.audio.loop = loop;
     this.audio.muted = muted;
+
     this.jumpSound.volume = 0.5;
+    this.jumpSound.playbackRate = 2;
+
     this.coinSound.volume = 0.5;
+    this.coinSound.playbackRate = 2;
 
     this.preloadImages();
   }
