@@ -154,7 +154,7 @@ class Game {
   }
 
   checkCollision() {
-    for (let obstacle of this.entityList.list) {
+    for (let obstacle of this.entityManager.list) {
       const marioRect = this.mario.element.getBoundingClientRect();
       const obstacleRect = obstacle.element.getBoundingClientRect();
 

@@ -86,6 +86,7 @@ class Entity {
   speed;
   point = 0;
   frameId = null;
+  touched = false;
 
   constructor({ bottom, speed, type, point = 0, className = 'obstacle' }) {
     this.type = type;
@@ -108,6 +109,10 @@ class Entity {
 
   get currentPosition() {
     return parseInt(this.element.style.right, 10); // parseInt('10.5px') => 10
+  }
+
+  hide(entity) {
+    entity.element.style.visibility = 'hidden'; // 리플로우 방지를 위해 visibility 사용
   }
 
   animate() {

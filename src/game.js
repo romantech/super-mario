@@ -21,7 +21,7 @@ class Game {
   score;
   mario;
   background;
-  entityList;
+  entityManager;
   eventHandler;
 
   constructor({
@@ -31,7 +31,7 @@ class Game {
     this.audio = new AudioManager();
     this.score = new Score();
     this.background = new Background({ speed });
-    this.entityList = new EntityManager({ speed, bottom });
+    this.entityManager = new EntityManager({ speed, bottom });
     this.mario = new Mario({ bottom, audio: this.audio });
     this.eventHandler = new EventHandler(this);
 
@@ -58,7 +58,7 @@ class Game {
   }
 
   reset() {
-    this.entityList.reset();
+    this.entityManager.reset();
     this.background.reset();
     this.score.reset();
   }
@@ -74,7 +74,7 @@ class Game {
     this.isPlaying = true;
 
     this.mario.run();
-    this.entityList.moveAll();
+    this.entityManager.moveAll();
     this.background.move();
     this.eventHandler.setupEventListeners();
     this.checkCollision();
@@ -86,7 +86,7 @@ class Game {
     this.isPlaying = false;
 
     this.mario.stop();
-    this.entityList.stopAll();
+    this.entityManager.stopAll();
     this.background.stop();
     this.eventHandler.removeEventListeners();
     cancelAnimationFrame(this.collisionFrameId);
@@ -108,10 +108,10 @@ class Game {
       const entityType = EntityManager.ENTITY_TYPES[idx];
 
       if (entityType === 'both') {
-        this.entityList.add('coin', true);
-        this.entityList.add('obstacle');
+        this.entityManager.add('coin', true);
+        this.entityManager.add('obstacle');
       } else {
-        this.entityList.add(entityType);
+        this.entityManager.add(entityType);
       }
 
       if (this.isPlaying) this.scheduleAddEntity();
@@ -119,18 +119,24 @@ class Game {
   }
 
   checkCollision() {
-    for (let entity of this.entityList.list) {
+    for (let entity of this.entityManager.list) {
       const marioRect = this.mario.element.getBoundingClientRect();
       const entityRect = entity.element.getBoundingClientRect();
 
-      if (this.isColliding(marioRect, entityRect)) {
-        if (entity.type === 'obstacle') {
-          this.toggleButtonActive(true);
-          return this.failed();
-        } else if (entity.type === 'coin') {
-          this.audio.playEffect('coin');
-          this.score.add(entity.point);
-          this.entityList.remove(entity);
+      if (!entity.touched && this.isColliding(marioRect, entityRect)) {
+        switch (entity.type) {
+          case 'obstacle': {
+            this.toggleButtonActive(true);
+            this.failed();
+            break;
+          }
+          case 'coin': {
+            this.audio.playEffect('coin');
+            this.score.add(entity.point);
+            entity.touched = true;
+            entity.hide(entity);
+            break;
+          }
         }
       }
     }
