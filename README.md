@@ -154,8 +154,9 @@ class Game {
   }
 
   checkCollision() {
+    const marioRect = this.mario.element.getBoundingClientRect();
+
     for (let obstacle of this.entityManager.list) {
-      const marioRect = this.mario.element.getBoundingClientRect();
       const obstacleRect = obstacle.element.getBoundingClientRect();
 
       if (this.isColliding(marioRect, obstacleRect)) {
