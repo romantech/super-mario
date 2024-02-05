@@ -119,8 +119,9 @@ class Game {
   }
 
   checkCollision() {
+    const marioRect = this.mario.element.getBoundingClientRect();
+
     for (let entity of this.entityManager.list) {
-      const marioRect = this.mario.element.getBoundingClientRect();
       const entityRect = entity.element.getBoundingClientRect();
 
       if (!entity.touched && this.isColliding(marioRect, entityRect)) {
@@ -134,7 +135,7 @@ class Game {
             this.audio.playEffect('coin');
             this.score.add(entity.point);
             entity.touched = true;
-            entity.hide(entity);
+            entity.hide();
           }
         }
       }

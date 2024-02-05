@@ -111,8 +111,8 @@ class Entity {
     return parseInt(this.element.style.right, 10); // parseInt('10.5px') => 10
   }
 
-  hide(entity) {
-    entity.element.style.visibility = 'hidden'; // 리플로우 방지를 위해 visibility 사용
+  hide() {
+    this.element.style.visibility = 'hidden'; // 리플로우 방지를 위해 visibility 사용
   }
 
   animate() {

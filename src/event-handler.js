@@ -27,7 +27,9 @@ export default class EventHandler {
 
   handleJump(e) {
     const isSpaceKeyPressed = e instanceof KeyboardEvent && e.code === 'Space';
-    const isTouchEvent = e instanceof TouchEvent && e.type === 'touchstart';
+    // 데스크톱 사파리에서 e instanceof TouchEvent 사용하면 아래 에러 발생 TouchEvent 찾을 수 없다는 에러 발생
+    // 따라서 'touches' in e 코드로 모바일 여부 판단
+    const isTouchEvent = 'touches' in e && e.type === 'touchstart';
 
     if (isSpaceKeyPressed || isTouchEvent) {
       // "시작" 버튼을 누르면 버튼에 포커스된 상태가 되고,
