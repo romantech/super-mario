@@ -2,7 +2,7 @@
 
 # Simple Super Mario Runner Game
 
-This is a Mario Runner game implemented in vanilla JavaScript without using Canvas. When the game starts, Mario automatically runs forward, and obstacles are randomly generated ahead. These obstacles can be avoided by jumping, which is done by pressing space (on PC) or touching (on Mobile). Every time you avoid an obstacle, the Score increases by 1 point.
+This game is a Mario Runner, developed using vanilla JavaScript without the Canvas API. As the game commences, Mario automatically advances, with obstacles appearing randomly in his path. Players can avoid these obstacles by jumping, which is achieved by pressing the space bar on a PC or tapping the screen on mobile devices. The game concludes if Mario collides with an obstacle. Points are earned each time Mario collects a coin.
 
 Additionally, a gravity effect has been implemented to make Mario's jumps look more natural.
 
