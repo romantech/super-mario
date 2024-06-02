@@ -7,7 +7,7 @@ This game is a Mario Runner, developed using vanilla JavaScript without the Canv
 Additionally, a gravity effect has been implemented to make Mario's jumps look more natural.
 
 - [Game Link](https://romantech.github.io/super-mario)
-- [Implementation Details Korean Ver](https://bit.ly/3ufjysq)
+- [Implementation Details Korean Ver](https://romantech.net/1265)
 
 ## Implementation Details
 
