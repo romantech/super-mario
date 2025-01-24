@@ -1,4 +1,4 @@
-![Image](https://github.com/user-attachments/assets/e3b7c90a-d553-4c17-88df-2cee15760ec5)
+![Image](https://github.com/user-attachments/assets/08cbdf5d-fce0-4c9c-a3c1-ea77a145821e)
 
 # Simple Super Mario Runner Game
 
