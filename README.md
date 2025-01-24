@@ -1,4 +1,4 @@
-![20240205_234709](https://github.com/romantech/super-mario/assets/8604840/8e7c258b-b815-41ea-b526-29d01470dd45)
+![Image](https://github.com/user-attachments/assets/e3b7c90a-d553-4c17-88df-2cee15760ec5)
 
 # Simple Super Mario Runner Game
 
